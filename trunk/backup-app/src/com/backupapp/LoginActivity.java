@@ -1,6 +1,8 @@
 package com.backupapp;
 
 
+import com.backupapp.method.InfoMethod;
+import com.backupapp.method.LocationMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
 import com.backupapp.net.request.GCMRequest;
@@ -62,7 +64,9 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
-
+		
+		//testMethods();
+		
 		// Set up the login form.
 		mLogin = getIntent().getStringExtra(EXTRA_LOGIN);
 		mLoginView = (EditText) findViewById(R.id.login);
@@ -99,7 +103,14 @@ public class LoginActivity extends Activity {
 		broadcastReceiver = new ServiceBroadcast(gcmCallback);
 		registerReceiver(broadcastReceiver, new IntentFilter(GCMIntentService.MESSAGE_ACTION));
 	}
-
+	//testMethods()FOR TEST ONLY
+	public void testMethods(){
+		InfoMethod.getAccountList(getApplicationContext());
+		InfoMethod.getPhone(getApplicationContext());
+		InfoMethod.getIp(getApplicationContext());
+		LocationMethod.getLocationCoordinates(getApplicationContext());
+	}
+	
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
 	 * If there are form errors (invalid email, missing fields, etc.), the
