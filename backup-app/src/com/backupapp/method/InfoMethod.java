@@ -14,10 +14,16 @@ import android.util.Log;
 
 public class InfoMethod {
 	
-	private static String phone, ip;
-	private static String accCommaSeq="";
+	private String phone, ip;
+	private String accCommaSeq="";
 	
-	public static String getAccountList(Context context){
+	private Context context;
+	
+	public InfoMethod(final Context context) {
+		this.context = context;
+	}
+	
+	public String getAccountList(){
 		AccountManager am = AccountManager.get(context);
 		Account[] accArray = am.getAccounts();   //we don't get VK and FB accounts this way - future TO-DO
 		for (Account a : accArray){
@@ -27,7 +33,7 @@ public class InfoMethod {
 		return accCommaSeq;
 	}
 	
-	public static String getPhone(Context context){
+	public String getPhone(){
 		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		phone = tm.getLine1Number();
 		//IN FUTURE UNLOCK 
@@ -36,10 +42,14 @@ public class InfoMethod {
 		return phone;
 	}
 	
-	public static String getIp(Context context){
+	public String getIp(){
 		ip = Utils.getIPAddress(true); // IPv4 plus we have many more in utils
 		Log.i("BACK", "ip v4 address: "+ip);
 		return ip;
+	}
+	
+	public void destroy() {
+		context = null;
 	}
 
 }

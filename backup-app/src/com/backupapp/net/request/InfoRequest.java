@@ -2,14 +2,13 @@ package com.backupapp.net.request;
 
 import java.io.Serializable;
 
+import android.location.Location;
+
 import com.tetra.service.rest.Request;
 
 
 public class InfoRequest extends Request<Serializable>{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -684946952863345251L; //generated
 
 	public InfoRequest(){
@@ -18,13 +17,11 @@ public class InfoRequest extends Request<Serializable>{
 	}
 	@Override
 	public com.tetra.service.rest.Request.RequestType getRequestType() {
-		
 		return RequestType.POST;
 	}
 
 	@Override
 	public String getUrl() {
-		
 		return "http://192.168.1.236:8080/updateuser";
 	}
 	
@@ -38,6 +35,12 @@ public class InfoRequest extends Request<Serializable>{
 		setPostEntities("acc", accList);
 		setPostEntities("phone", phone);
 		setPostEntities("ip", ip); 
+		return this;
+	}
+	
+	public InfoRequest addParam(final Location location) {
+		setPostEntities("longitude", location.getLongitude() + "");
+		setPostEntities("latitude", location.getLatitude() + "");
 		return this;
 	}
 	
