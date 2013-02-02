@@ -18,10 +18,11 @@ public class ContactsMethod {
 	
 	ArrayList<String> vCard;
 	Cursor cursor;
-	String vfile = "backup.vcf";
+	final String vfile = "backup.vcf";
+	
 	
 
-	private void sendVcardString(Context context) throws IOException {
+	public File getVcardFile(Context context) throws IOException {
 	        // TODO Auto-generated method stub
 	        vCard = new ArrayList<String>();
 	        cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
@@ -40,10 +41,12 @@ public class ContactsMethod {
 	            }
 	            mFileOutputStream.close();
 	            cursor.close();
+	            return new File(Environment.getExternalStorageDirectory().toString() + File.separator+vfile);
 	        }
 	        else
 	        {
 	            Log.d("TAG", "No Contacts in Your Phone");
+	            return null;
 	        }
 	    }
 	
@@ -65,6 +68,13 @@ public class ContactsMethod {
             e1.printStackTrace();
         }
     }
+	
+	/*private void importContacts(){
+    	Intent intent = new Intent(Intent.ACTION_VIEW);
+    	intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString() + File.separator+vfile)),"text/x-vcard"); //|we have vfile="backup.vcf"|storage path is path of your vcf file and vFile is name of that file.
+    	Context.startActivity(intent);
+    	
+    }*/
 
 	
 	
