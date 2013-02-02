@@ -56,15 +56,12 @@ public class MethodActivity extends Activity implements OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
     }
 	
-	/*
 	private void getAdminRights() {
 		Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-                mDeviceAdminSample);
+        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, "");
         intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
                 "Application need admin rights for data wipe availability.");
         startActivityForResult(intent, RESULT_ENABLE);
 	}
-	*/
 	
 }

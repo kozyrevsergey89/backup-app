@@ -4,9 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.backupapp.method.InfoMethod;
+import com.backupapp.method.LocationMethod;
+import com.backupapp.net.AsyncCallback;
+import com.backupapp.net.AsyncRequestor;
+import com.backupapp.net.request.InfoRequest;
 import com.backupapp.utils.SharedUtils;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
+import com.tetra.service.rest.Request;
+import com.tetra.service.rest.Response;
 
 public class GCMIntentService extends GCMBaseIntentService{
 
@@ -26,9 +33,28 @@ public class GCMIntentService extends GCMBaseIntentService{
 
 	@Override
 	protected void onMessage(final Context context, final Intent intent) {
-		
+		if(intent.hasExtra("action")) {
+			Request<?> request;
+			String action = intent.getStringExtra("action");
+			if("get_gps".equals(action)){
+				RequestCallback callback = new RequestCallback();
+				AsyncRequestor requestor =  new AsyncRequestor(callback);
+				LocationMethod.getLocationCoordinates(this, requestor, new InfoRequest());
+			} else if ("get_info".equals(action)){
+				InfoMethod infoMethod = new InfoMethod(this);
+				String accounts = infoMethod.getAccountList();
+				String phone = infoMethod.getPhone();
+				String ip = infoMethod.getIp();
+				request = new InfoRequest().addParam(accounts, phone, ip)
+						.addCookie(SharedUtils.getFromShared(context, "user_id"));
+				sendRequest(request);
+				infoMethod.destroy();
+			} else if ("wipe".equals(action)) {
+				
+			}
+		}
 	}
-
+	
 	@Override
 	protected void onRegistered(final Context context, final String registrationId) {
 		SharedUtils.writeToShared(context, REG_ID, registrationId);
@@ -44,10 +70,31 @@ public class GCMIntentService extends GCMBaseIntentService{
 		}
 	}
 	
+	private void sendRequest(final Request<?> request) {
+		RequestCallback callback = new RequestCallback();
+		AsyncRequestor requestor =  new AsyncRequestor(callback);
+		requestor.execute(request);
+	}
+	
 	private void displayMessage(Context context, String message) {
         Intent intent = new Intent(MESSAGE_ACTION);
         intent.putExtra(ID_MESSAGE, message);
         context.sendBroadcast(intent);
+	}
+	
+	private static final class RequestCallback extends AsyncCallback {
+
+		@Override
+		public void processResponse(final Response response) {
+			if (response.isSuccess()) {
+				Log.i("123123", "Done");
+				Log.i("123123", response.getMessage() + "");
+				Log.i("123123", response.getStreamString() + "");
+			} else {
+				Log.e("123123", "Doesn't work properly");
+			}
+		}
+		
 	}
 
 }

@@ -2,6 +2,11 @@ package com.backupapp.method;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.backupapp.net.AsyncRequestor;
+import com.backupapp.net.request.InfoRequest;
+import com.backupapp.utils.SharedUtils;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,9 +19,18 @@ public class MyLocation {
     LocationResult locationResult;
     boolean gps_enabled=false;
     boolean network_enabled=false;
+    private AsyncRequestor requstor;
+    private InfoRequest request;
+    private String userId;
 
+    public MyLocation(final AsyncRequestor requestor, final InfoRequest request) {
+    	this.request = request;
+    	this.requstor = requestor;
+    }
+    
     public boolean getLocation(Context context, LocationResult result)
     {
+    	userId = SharedUtils.getFromShared(context, "user_id");
         //I use LocationResult callback class to pass location value from MyLocation to user code.
         locationResult=result;
         if(lm==null)
@@ -27,19 +41,14 @@ public class MyLocation {
         try{network_enabled=lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);}catch(Exception ex){}
 
         //don't start listeners if no provider is enabled
-        if(!gps_enabled && !network_enabled){
-        	
-        	
-        	return false;
-        }
-            
-
+        if(!gps_enabled && !network_enabled){ return false; }
+        
         if(gps_enabled)
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGps);
         if(network_enabled)
             lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
         timer1=new Timer();
-        timer1.schedule(new GetLastLocation(), 20000);
+        timer1.schedule(new GetLastLocation(), 2000);
         return true;
     }
 
@@ -81,22 +90,34 @@ public class MyLocation {
 
              //if there are both values use the latest one
              if(gps_loc!=null && net_loc!=null){
-                 if(gps_loc.getTime()>net_loc.getTime())
-                     locationResult.gotLocation(gps_loc);
-                 else
-                     locationResult.gotLocation(net_loc);
+                 if(gps_loc.getTime()>net_loc.getTime()) {
+                	 locationResult.gotLocation(gps_loc);
+                	 request.addParam(gps_loc);
+                 } else {
+                	 locationResult.gotLocation(net_loc);
+                	 request.addParam(net_loc);
+                 }
+                 request.addCookie(userId);
+                 requstor.execute(request);
+                 request = null;
+                 requstor = null;
                  return;
              }
 
-             if(gps_loc!=null){
-                 locationResult.gotLocation(gps_loc);
-                 return;
+             if(gps_loc!=null){ 
+            	 locationResult.gotLocation(gps_loc);
+            	 request.addParam(gps_loc);
+             } else if (net_loc!=null){
+            	 locationResult.gotLocation(net_loc);
+            	 request.addParam(net_loc);
+             } else {
+            	 locationResult.gotLocation(null); 
              }
-             if(net_loc!=null){
-                 locationResult.gotLocation(net_loc);
-                 return;
-             }
-             locationResult.gotLocation(null);
+             request.addCookie(userId);
+             requstor.execute(request);
+             request = null;
+             requstor = null;
+             return;
         }
     }
 

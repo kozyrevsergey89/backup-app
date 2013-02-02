@@ -46,6 +46,7 @@ public class ContactsMethod {
 	            Log.d("TAG", "No Contacts in Your Phone");
 	        }
 	    }
+	
 	private void get(Cursor cursor2, Context context) {
         String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
         Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
