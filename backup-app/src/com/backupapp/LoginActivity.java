@@ -216,6 +216,7 @@ public class LoginActivity extends Activity {
 							GCMRegistrar.register(context, SENDER_ID);
 						} else if (GCMRegistrar.isRegisteredOnServer(context)) {
 							((LoginActivity)context).showProgress(false);
+							context.startActivity(new Intent(context, MethodActivity.class));
 							context = null;
 							return; 
 						}
@@ -223,6 +224,7 @@ public class LoginActivity extends Activity {
 				}
 			} else {
 				((LoginActivity)context).showProgress(false);
+				context.startActivity(new Intent(context, MethodActivity.class));
 			}
 			context = null;
 		}
@@ -262,6 +264,7 @@ public class LoginActivity extends Activity {
 			Log.i("123123", response.getMessage() + "");
 			Log.i("123123", response.getStreamString() + "");
 			activity.showProgress(false);
+			activity.startActivity(new Intent(activity, MethodActivity.class));
 			activity = null;
 		}
 		
