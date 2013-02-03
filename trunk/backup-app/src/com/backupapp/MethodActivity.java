@@ -1,10 +1,11 @@
 package com.backupapp;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.List;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,12 +22,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.backupapp.method.ContactsMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
+import com.backupapp.net.request.GetBackFile;
 import com.backupapp.net.request.GetFileRequest;
 import com.backupapp.utils.SharedUtils;
+import com.tetra.service.rest.Parameter;
 import com.tetra.service.rest.Request;
 import com.tetra.service.rest.Response;
 
@@ -52,8 +56,8 @@ public class MethodActivity extends Activity implements OnClickListener {
 		backup.setOnClickListener(this);
 		restore.setOnClickListener(this);
 		enableWipe.setOnClickListener(this);
-		ContactLader contactLader = new ContactLader();
-		contactLader.execute(this);
+		ContactLader contactLader = new ContactLader(this);
+		contactLader.execute();
 	}
 
 	/**
@@ -100,6 +104,10 @@ public class MethodActivity extends Activity implements OnClickListener {
 			sendRequest(callback, fileRequest);
 			break;
 		case R.id.bt_restore_vcf:
+			showProgress(true);
+			GetBackFile backGet = new GetBackFile().addCookie(userId);
+			GetBackFileCallback fileCallback = new GetBackFileCallback(this);
+			sendRequest(fileCallback, backGet);
 			break;
 		case R.id.bt_enable_wipe:
 			break;
@@ -148,12 +156,12 @@ public class MethodActivity extends Activity implements OnClickListener {
 		@Override
 		public void processResponse(final Response response) {
 			if (response.isSuccess()) {
-				if (!response.getStreamString().isEmpty()) {
-					Log.i("123123", response.getStreamString() + "");
-					try {
-						activity.url = URLEncoder.encode(response.getStreamString(), "UTF-8");
-					} catch (final UnsupportedEncodingException e1) {
-						Log.e("123123", e1.getMessage() + "");
+				List<Parameter> headers = response.getHeaders();
+				if(headers != null && !headers.isEmpty()) {
+					for(Parameter param : headers) {
+						if("backurl".equals(param.getName())){
+							activity.url = param.getValue();
+						}
 					}
 					MethodActivity.PostFile postFile = activity.getPost();
 					postFile.addCookie(activity.userId);
@@ -180,6 +188,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void processResponse(final Response response) {
+			Log.i("123123", response.getMessage() + "");
 			Log.i("123123", response.getResultCode() + "");
 			Log.i("123123", response.getStatus().name());
 			Log.i("123123", response.getStreamString() + "");
@@ -213,13 +222,19 @@ public class MethodActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	private static class ContactLader extends AsyncTask<Context, Void, File> {
+	private static class ContactLader extends AsyncTask<Void, Void, File> {
 
+		private Context context;
+		
+		public ContactLader(final Context context) {
+			this.context = context;
+		}
+		
 		@Override
-		protected File doInBackground(Context... params) {
+		protected File doInBackground(Void... params) {
 			ContactsMethod method = new ContactsMethod();
 			try {
-				File file = method.getVcardFile(params[0]);
+				File file = method.getVcardFile(context);
 				return file;
 			} catch (final IOException e) {
 				Log.e("123123", "Unable to get vcard file");
@@ -230,10 +245,49 @@ public class MethodActivity extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(final File result) {
 			super.onPostExecute(result);
+			if (context != null) {
+				Toast.makeText(context, "Contacts backuped", Toast.LENGTH_SHORT).show();
+			}
 			if (result != null) {
 				Log.i("123123", result.getAbsolutePath());
 			} else {
 				Log.e("123123", "No file");
+			}
+		}
+	}
+	
+	private static class GetBackFileCallback extends AsyncCallback {
+
+		private Context context;
+		private ContactsMethod method;
+		
+		public GetBackFileCallback(final Context context) {
+			this.context = context;
+			method = new ContactsMethod();
+		}
+		
+		@Override
+		public void processResponse(final Response response) {
+			((MethodActivity)context).showProgress(false);
+			if (response.isSuccess()) {
+				String contacts = response.getStreamString();
+				if (contacts != null && !contacts.isEmpty()) {
+					createFile(contacts);
+					method.importContacts(context);
+					context = null;
+					method = null;
+				}
+			}
+		}
+		
+		private void createFile(final String string) {
+			try {
+				String path = Environment.getExternalStorageDirectory().toString() + File.separator+"backup.vcf";
+				BufferedWriter out = new BufferedWriter(new FileWriter(path));
+				out.write(string);
+				out.close();
+			} catch (final IOException e) {
+				Log.e("123123", e.getMessage() + "");
 			}
 		}
 		
