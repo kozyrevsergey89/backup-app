@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
@@ -64,17 +65,15 @@ public class ContactsMethod {
             vCard.add(vcardstring);
         } catch (Exception e1) 
         {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
     }
 	
-	/*private void importContacts(){
+	public void importContacts(final Context context){
     	Intent intent = new Intent(Intent.ACTION_VIEW);
     	intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString() + File.separator+vfile)),"text/x-vcard"); //|we have vfile="backup.vcf"|storage path is path of your vcf file and vFile is name of that file.
-    	Context.startActivity(intent);
-    	
-    }*/
+    	context.startActivity(intent);
+    }
 
 	
 	
