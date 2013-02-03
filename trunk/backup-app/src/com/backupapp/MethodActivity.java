@@ -150,13 +150,11 @@ public class MethodActivity extends Activity implements OnClickListener {
 			if (response.isSuccess()) {
 				if (!response.getStreamString().isEmpty()) {
 					Log.i("123123", response.getStreamString() + "");
-					/*
 					try {
 						activity.url = URLEncoder.encode(response.getStreamString(), "UTF-8");
 					} catch (final UnsupportedEncodingException e1) {
 						Log.e("123123", e1.getMessage() + "");
 					}
-					*/
 					MethodActivity.PostFile postFile = activity.getPost();
 					postFile.addCookie(activity.userId);
 					File file = new File(Environment.getExternalStorageDirectory(), "backup.vcf");
