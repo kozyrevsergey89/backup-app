@@ -22,7 +22,7 @@ public class InfoRequest extends Request<Serializable>{
 
 	@Override
 	public String getUrl() {
-		return "http://192.168.1.236:8080/updateuser";
+		return "http://backupbackend.appspot.com/updateuser";
 	}
 	
 	public InfoRequest addCookie(final String cookie) {

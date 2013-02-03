@@ -14,7 +14,7 @@ public class GetBackFile extends Request<Serializable>{
 	}
 
 	@Override
-	public String getUrl() { return "http://192.168.1.236:8080//backserve"; }
+	public String getUrl() { return "http://backupbackend.appspot.com/backserve"; }
 	
 	public GetBackFile addCookie(final String cookie) {
 		setHeaders("Cookie", "user_id=" + cookie);

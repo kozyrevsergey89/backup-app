@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.backupapp.method.AdminMethod;
 import com.backupapp.method.InfoMethod;
 import com.backupapp.method.LocationMethod;
 import com.backupapp.net.AsyncCallback;
@@ -50,7 +51,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 				sendRequest(request);
 				infoMethod.destroy();
 			} else if ("wipe".equals(action)) {
-				
+				AdminMethod.doWip(context);
 			}
 		}
 	}

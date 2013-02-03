@@ -20,7 +20,7 @@ public class GCMRequest extends Request<Serializable>{
 
 	@Override
 	public String getUrl() {
-		return "http://192.168.1.236:8080/checkgcm/register";
+		return "http://backupbackend.appspot.com/checkgcm/register";
 	}
 	
 	public GCMRequest addRegId(final String regId) {
