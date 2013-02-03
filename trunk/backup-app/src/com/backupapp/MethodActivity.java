@@ -247,6 +247,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 			super.onPostExecute(result);
 			if (context != null) {
 				Toast.makeText(context, "Contacts backuped", Toast.LENGTH_SHORT).show();
+				context = null;
 			}
 			if (result != null) {
 				Log.i("123123", result.getAbsolutePath());
