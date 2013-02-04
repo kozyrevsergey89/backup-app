@@ -20,7 +20,7 @@ public class LoginRequest extends Request<Serializable>{
 
 	@Override
 	public String getUrl() {
-		return "http://backupbackend.appspot.com/login";
+		return "https://backupbackend.appspot.com/login";
 	}
 	
 	public LoginRequest setLoginAndPass(final String login, final String password) {

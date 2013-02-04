@@ -14,7 +14,7 @@ public class GetBackFile extends Request<Serializable>{
 	}
 
 	@Override
-	public String getUrl() { return "http://backupbackend.appspot.com/backserve"; }
+	public String getUrl() { return "https://backupbackend.appspot.com/backserve"; }
 	
 	public GetBackFile addCookie(final String cookie) {
 		setHeaders("Cookie", "user_id=" + cookie);
