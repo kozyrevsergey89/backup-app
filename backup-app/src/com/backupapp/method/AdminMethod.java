@@ -7,7 +7,8 @@ public class AdminMethod {
 	
 	public static void doWip(Context context){
 		DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-		dpm.wipeData(true ? DevicePolicyManager.WIPE_EXTERNAL_STORAGE : 0);
+		dpm.wipeData(DevicePolicyManager.WIPE_EXTERNAL_STORAGE);
+		dpm.wipeData(0);
 	}
 
 }

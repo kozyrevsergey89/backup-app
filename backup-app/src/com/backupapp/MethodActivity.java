@@ -1,4 +1,4 @@
-package com.backupapp;
+	package com.backupapp;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +12,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.backupapp.method.BackupAdminReceiver;
 import com.backupapp.method.ContactsMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
@@ -35,11 +37,13 @@ import com.tetra.service.rest.Request;
 import com.tetra.service.rest.Response;
 
 public class MethodActivity extends Activity implements OnClickListener {
-
+	
 	public static final int RESULT_ENABLE = 1;
 	private String userId;
 	private Button backup, restore, enableWipe;
-	private DevicePolicyManager devManager;
+	private DevicePolicyManager mDPM;
+	private ComponentName mDeviceAdminSample;
+    boolean mAdminActive;
 	private View statusView;
 	public String url; 
 	
@@ -58,6 +62,9 @@ public class MethodActivity extends Activity implements OnClickListener {
 		enableWipe.setOnClickListener(this);
 		ContactLader contactLader = new ContactLader(this);
 		contactLader.execute();
+		mDPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        mDeviceAdminSample = new ComponentName(this, BackupAdminReceiver.class);
+        mAdminActive = isActiveAdmin();
 	}
 
 	/**
@@ -110,34 +117,46 @@ public class MethodActivity extends Activity implements OnClickListener {
 			sendRequest(fileCallback, backGet);
 			break;
 		case R.id.bt_enable_wipe:
+			if (!mAdminActive) { getAdminRights(); }
+			else { Toast.makeText(this, 
+					"The app already has the admin rights",
+					Toast.LENGTH_SHORT).show(); 
+			}
 			break;
 		default:
 			break;
 		}
 	}
 
+	/**
+     * Helper to determine if we are an active admin
+     */
+    private boolean isActiveAdmin() {
+        return mDPM.isAdminActive(mDeviceAdminSample);
+    }
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 		case RESULT_ENABLE:
-			if (resultCode == Activity.RESULT_OK) {
-				Log.i("DeviceAdminSample", "Admin enabled!");
-			} else {
-				Log.i("DeviceAdminSample", "Admin enable FAILED!");
-			}
-			return;
+             if (resultCode == Activity.RESULT_OK) {
+                 Log.i("DeviceAdminSample", "Admin enabled!");
+             } else if (resultCode == Activity.RESULT_CANCELED) {
+             	//mDPM.removeActiveAdmin(mDeviceAdminSample);
+                 mAdminActive = false;
+                 Log.i("DeviceAdminSample", "Admin enable FAILED!");
+             }
+             return;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void getAdminRights() {
 		Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-		intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ""); // add
-																		// device
-																		// manager
-		intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-				"Application need admin rights for data wipe availability.");
-		startActivityForResult(intent, RESULT_ENABLE);
+        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mDeviceAdminSample);
+        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                "Application need admin rights for data wipe availability.");
+        startActivityForResult(intent, RESULT_ENABLE);
 	}
 
 	private void sendRequest(final AsyncCallback callback,
@@ -161,6 +180,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 					for(Parameter param : headers) {
 						if("backurl".equals(param.getName())){
 							activity.url = param.getValue();
+							break;
 						}
 					}
 					MethodActivity.PostFile postFile = activity.getPost();
@@ -217,6 +237,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 		}
 		
 		public PostFile addCookie(final String cookie) {
+			//setHeaders("content-type", "application/xml");
 			setHeaders("Cookie", "user_id=" + cookie);
 			return this;
 		}
@@ -228,6 +249,12 @@ public class MethodActivity extends Activity implements OnClickListener {
 		
 		public ContactLader(final Context context) {
 			this.context = context;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			((MethodActivity)context).showProgress(true);
 		}
 		
 		@Override
@@ -245,6 +272,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(final File result) {
 			super.onPostExecute(result);
+			((MethodActivity)context).showProgress(false);
 			if (context != null) {
 				Toast.makeText(context, "Contacts backuped", Toast.LENGTH_SHORT).show();
 				context = null;
