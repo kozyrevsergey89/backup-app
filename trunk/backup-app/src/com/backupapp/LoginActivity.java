@@ -1,6 +1,8 @@
 package com.backupapp;
 
 
+import java.util.List;
+
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
 import com.backupapp.net.request.GCMRequest;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user.
@@ -265,8 +268,24 @@ public class LoginActivity extends Activity {
 			Log.i("123123", response.getResultCode() + "");
 			Log.i("123123", response.getMessage() + "");
 			Log.i("123123", response.getStreamString() + "");
+			List<Parameter> params = response.getHeaders();
+			boolean collision = false;
+			if (params != null && !params.isEmpty()) {
+				for (Parameter param : params) {
+					if("user_collision".equals(param.getName())){
+						collision = true;
+						Toast.makeText(activity,
+								"You have two accounts on one device",
+								 Toast.LENGTH_SHORT).show();
+						break;
+					}
+				}
+			}
 			activity.showProgress(false);
-			activity.startActivity(new Intent(activity, MethodActivity.class));
+			if(!collision) {
+				activity.finish();
+				activity.startActivity(new Intent(activity, MethodActivity.class));
+			}
 			activity = null;
 		}
 		
