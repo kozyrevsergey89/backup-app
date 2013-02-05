@@ -217,6 +217,7 @@ public class LoginActivity extends Activity {
 						} else if (GCMRegistrar.isRegisteredOnServer(context)) {
 							((LoginActivity)context).showProgress(false);
 							context.startActivity(new Intent(context, MethodActivity.class));
+							((LoginActivity)context).finish();
 							context = null;
 							return; 
 						}
@@ -225,6 +226,7 @@ public class LoginActivity extends Activity {
 			} else {
 				((LoginActivity)context).showProgress(false);
 				context.startActivity(new Intent(context, MethodActivity.class));
+				((LoginActivity)context).finish();
 			}
 			context = null;
 		}

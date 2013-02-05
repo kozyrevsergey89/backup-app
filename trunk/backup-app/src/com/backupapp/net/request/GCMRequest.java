@@ -18,6 +18,7 @@ public class GCMRequest extends Request<Serializable>{
 		return RequestType.POST;
 	}
 
+	//backupbackend.appspot.com
 	@Override
 	public String getUrl() {
 		return "https://backupbackend.appspot.com/checkgcm/register";
