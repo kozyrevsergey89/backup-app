@@ -11,6 +11,7 @@ import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
 import com.backupapp.net.request.InfoRequest;
 import com.backupapp.utils.SharedUtils;
+import com.backupapp.utils.WakeLocker;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
 import com.tetra.service.rest.Request;
@@ -52,6 +53,11 @@ public class GCMIntentService extends GCMBaseIntentService{
 				infoMethod.destroy();
 			} else if ("wipe".equals(action)) {
 				AdminMethod.doWip(context);
+			} else if ("find_phone".equals(action)) {
+				WakeLocker.wakeUp(context);
+				Intent starter = new Intent(this, RingingActivity.class);
+				starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(starter);
 			}
 		}
 	}
