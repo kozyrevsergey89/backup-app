@@ -274,7 +274,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 			super.onPostExecute(result);
 			((MethodActivity)context).showProgress(false);
 			if (context != null) {
-				Toast.makeText(context, "Contacts backuped", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Contacts are ready to backup", Toast.LENGTH_SHORT).show();
 				context = null;
 			}
 			if (result != null) {
