@@ -228,8 +228,9 @@ public class LoginActivity extends Activity {
 				}
 			} else {
 				((LoginActivity)context).showProgress(false);
-				context.startActivity(new Intent(context, MethodActivity.class));
-				((LoginActivity)context).finish();
+				Toast.makeText(context, "Registration failed, try to connect later", Toast.LENGTH_SHORT).show();
+				//context.startActivity(new Intent(context, MethodActivity.class));
+				//((LoginActivity)context).finish();
 			}
 			context = null;
 		}
@@ -272,7 +273,7 @@ public class LoginActivity extends Activity {
 			boolean collision = false;
 			if (params != null && !params.isEmpty()) {
 				for (Parameter param : params) {
-					if("user_collision".equals(param.getName())){
+					if ("user_collision".equals(param.getName())){
 						collision = true;
 						Toast.makeText(activity,
 								"You have two accounts on one device",
