@@ -218,8 +218,8 @@ public class LoginActivity extends Activity {
 						if (regId.equals("")) {
 							GCMRegistrar.register(context, SENDER_ID);
 						} else if (GCMRegistrar.isRegisteredOnServer(context)) {
-							((LoginActivity)context).showProgress(false);
 							context.startActivity(new Intent(context, MethodActivity.class));
+							((LoginActivity)context).showProgress(false);
 							((LoginActivity)context).finish();
 							context = null;
 							return; 
@@ -282,10 +282,11 @@ public class LoginActivity extends Activity {
 					}
 				}
 			}
-			activity.showProgress(false);
+			
 			if(!collision) {
-				activity.finish();
 				activity.startActivity(new Intent(activity, MethodActivity.class));
+				activity.showProgress(false);
+				activity.finish();
 			}
 			activity = null;
 		}

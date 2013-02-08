@@ -51,6 +51,11 @@
             android:screenOrientation="portrait"
             />
         
+        <activity 
+            android:name="com.backupapp.RingingActivity"
+            android:screenOrientation="portrait"
+            />
+        
         <receiver android:name=".method.BackupAdminReceiver"
                 android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data android:name="android.app.device_admin"
