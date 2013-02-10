@@ -44,4 +44,9 @@ public class InfoRequest extends Request<Serializable>{
 		return this;
 	}
 	
+	public InfoRequest addCurrentFlag(final boolean current) {
+		setPostEntities("current", current ? "true" : "false");
+		return this;
+	}
+	
 }
