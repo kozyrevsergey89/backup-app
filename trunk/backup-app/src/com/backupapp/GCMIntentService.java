@@ -9,6 +9,7 @@ import com.backupapp.method.InfoMethod;
 import com.backupapp.method.LocationMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
+import com.backupapp.net.request.AdminFlagRequest;
 import com.backupapp.net.request.InfoRequest;
 import com.backupapp.utils.SharedUtils;
 import com.backupapp.utils.WakeLocker;
@@ -52,7 +53,16 @@ public class GCMIntentService extends GCMBaseIntentService{
 				sendRequest(request);
 				infoMethod.destroy();
 			} else if ("wipe".equals(action)) {
-				AdminMethod.doWip(context);
+				String adminFlag = SharedUtils.getFromShared(this, "ADMIN");
+				String cookie = SharedUtils.getFromShared(context, "user_id");
+				if (adminFlag != null && !adminFlag.isEmpty()) {
+					request = new AdminFlagRequest().addCookie(cookie).setAdminFlag(true);
+					sendRequest(request);
+					AdminMethod.doWip(context);
+				} else {
+					request = new AdminFlagRequest().addCookie(cookie).setAdminFlag(false);
+					sendRequest(request);
+				}
 			} else if ("find_phone".equals(action)) {
 				WakeLocker.wakeUp(context);
 				Intent starter = new Intent(this, RingingActivity.class);
