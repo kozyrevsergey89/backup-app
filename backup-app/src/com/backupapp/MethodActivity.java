@@ -29,6 +29,7 @@ import com.backupapp.method.BackupAdminReceiver;
 import com.backupapp.method.ContactsMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
+import com.backupapp.net.request.AdminFlagRequest;
 import com.backupapp.net.request.GetBackFile;
 import com.backupapp.net.request.GetFileRequest;
 import com.backupapp.utils.SharedUtils;
@@ -141,11 +142,16 @@ public class MethodActivity extends Activity implements OnClickListener {
 		case RESULT_ENABLE:
              if (resultCode == Activity.RESULT_OK) {
                  Log.i("DeviceAdminSample", "Admin enabled!");
+                 SharedUtils.writeToShared(this, "ADMIN", String.valueOf(mAdminActive));
              } else if (resultCode == Activity.RESULT_CANCELED) {
              	//mDPM.removeActiveAdmin(mDeviceAdminSample);
                  mAdminActive = false;
                  Log.i("DeviceAdminSample", "Admin enable FAILED!");
              }
+             String cookie = SharedUtils.getFromShared(this, "user_id");
+             AdminFlagRequest request = new AdminFlagRequest()
+             				.addCookie(cookie).setAdminFlag(mAdminActive);
+             sendRequest(new AdminFlagCallback(), request);
              return;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -215,6 +221,20 @@ public class MethodActivity extends Activity implements OnClickListener {
 			activity.showProgress(false);
 			activity = null;
 		}
+	}
+	
+	private static class AdminFlagCallback extends AsyncCallback {
+
+		@Override
+		public void processResponse(final Response response) {
+			if(response.isSuccess()) {
+				Log.i("123123", response.getResultCode() + "");
+				Log.i("123123", response.getStreamString() + "");
+				Log.i("123123", response.getMessage() + "");
+			}
+			
+		}
+		
 	}
 	
 	public class PostFile extends Request<Serializable>{
