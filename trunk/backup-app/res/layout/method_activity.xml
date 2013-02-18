@@ -31,23 +31,33 @@
     
     <Button
         android:id="@+id/bt_backup_vcf"
-        android:layout_height="wrap_content"
+        android:layout_height="70dip"
         android:layout_width="match_parent"
         android:text="@string/backup_vcard"
+        android:layout_margin="10dip"
         />
     
     <Button
         android:id="@+id/bt_restore_vcf"
-        android:layout_height="wrap_content"
+        android:layout_height="70dip"
         android:layout_width="match_parent"
         android:text="@string/restore_vcard"
+        android:layout_margin="10dip"
         />
     
     <Button
         android:id="@+id/bt_enable_wipe"
-        android:layout_height="wrap_content"
+        android:layout_height="70dip"
         android:layout_width="match_parent"
         android:text="@string/enable_wipe"
+        android:layout_margin="10dip"
+        />
+    <Button
+        android:id="@+id/bt_choose_sound"
+        android:layout_height="70dip"
+        android:layout_width="match_parent"
+        android:text="@string/choose_sound"
+        android:layout_margin="10dip"
         />
 
 </LinearLayout>

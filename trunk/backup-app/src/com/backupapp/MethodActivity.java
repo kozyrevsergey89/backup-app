@@ -15,6 +15,8 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,14 +41,16 @@ import com.tetra.service.rest.Response;
 
 public class MethodActivity extends Activity implements OnClickListener {
 	
-	public static final int RESULT_ENABLE = 1;
+	public static final int RESULT_ENABLE = 1, RESULT_SOUND=5;
 	private String userId;
-	private Button backup, restore, enableWipe;
+	private Button backup, restore, enableWipe, chooseSound;
 	private DevicePolicyManager mDPM;
 	private ComponentName mDeviceAdminSample;
     boolean mAdminActive;
 	private View statusView;
-	public String url; 
+	public String url, soundUriString;
+	private ContactLader contactLader;
+	
 	
 
 	@Override
@@ -57,12 +61,14 @@ public class MethodActivity extends Activity implements OnClickListener {
 		backup = (Button) findViewById(R.id.bt_backup_vcf);
 		restore = (Button) findViewById(R.id.bt_restore_vcf);
 		enableWipe = (Button) findViewById(R.id.bt_enable_wipe);
+		chooseSound = (Button) findViewById(R.id.bt_choose_sound);
 		statusView = (View) findViewById(R.id.sstatus);
 		backup.setOnClickListener(this);
 		restore.setOnClickListener(this);
 		enableWipe.setOnClickListener(this);
-		ContactLader contactLader = new ContactLader(this);
-		contactLader.execute();
+		chooseSound.setOnClickListener(this);
+		contactLader = new ContactLader(this);
+		//contactLader.execute();
 		mDPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mDeviceAdminSample = new ComponentName(this, BackupAdminReceiver.class);
         mAdminActive = isActiveAdmin();
@@ -101,15 +107,22 @@ public class MethodActivity extends Activity implements OnClickListener {
 			enableWipe.setVisibility(View.GONE);
 		}
 	}
+	
+	public void sendBackupedFile(){
+		GetFileRequest fileRequest = new GetFileRequest().addCookie(userId);
+		UrlRequestCallback callback = new UrlRequestCallback(this);
+		sendRequest(callback, fileRequest);
+	}
 
 	@Override
 	public void onClick(final View view) {
 		switch (view.getId()) {
 		case R.id.bt_backup_vcf:
 			showProgress(true);
-			GetFileRequest fileRequest = new GetFileRequest().addCookie(userId);
-			UrlRequestCallback callback = new UrlRequestCallback(this);
-			sendRequest(callback, fileRequest);
+			contactLader.execute();
+			//GetFileRequest fileRequest = new GetFileRequest().addCookie(userId);
+			//UrlRequestCallback callback = new UrlRequestCallback(this);
+			//sendRequest(callback, fileRequest);
 			break;
 		case R.id.bt_restore_vcf:
 			showProgress(true);
@@ -124,6 +137,12 @@ public class MethodActivity extends Activity implements OnClickListener {
 					Toast.LENGTH_SHORT).show(); 
 			}
 			break;
+		case R.id.bt_choose_sound:
+			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Sound");
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+			this.startActivityForResult(intent, RESULT_SOUND);
 		default:
 			break;
 		}
@@ -142,7 +161,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 		case RESULT_ENABLE:
              if (resultCode == Activity.RESULT_OK) {
                  Log.i("DeviceAdminSample", "Admin enabled!");
-                 SharedUtils.writeToShared(this, "ADMIN", String.valueOf(mAdminActive));
+                 SharedUtils.writeToShared(this, "ADMIN", String.valueOf(isActiveAdmin()));
              } else if (resultCode == Activity.RESULT_CANCELED) {
              	//mDPM.removeActiveAdmin(mDeviceAdminSample);
                  mAdminActive = false;
@@ -150,9 +169,20 @@ public class MethodActivity extends Activity implements OnClickListener {
              }
              String cookie = SharedUtils.getFromShared(this, "user_id");
              AdminFlagRequest request = new AdminFlagRequest()
-             				.addCookie(cookie).setAdminFlag(mAdminActive);
+             				.addCookie(cookie).setAdminFlag(isActiveAdmin());
              sendRequest(new AdminFlagCallback(), request);
              return;
+		case RESULT_SOUND:
+			if (resultCode == Activity.RESULT_OK) {
+				Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+				soundUriString = uri.toString();
+				
+				Log.i("SOUND", "picked sound: " + soundUriString);
+			} else if (resultCode == Activity.RESULT_CANCELED) {
+				soundUriString = null;
+				Toast.makeText(this, R.string.default_sound, Toast.LENGTH_SHORT);
+			}
+			SharedUtils.writeToShared(this, "SOUND_URI_STRING", soundUriString);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -197,6 +227,9 @@ public class MethodActivity extends Activity implements OnClickListener {
 					activity.sendRequest(callback, postFile);
 					activity = null;
 				}
+			} else {
+				activity.showProgress(false);
+				Toast.makeText(activity, R.string.no_connection, Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -282,6 +315,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 			ContactsMethod method = new ContactsMethod();
 			try {
 				File file = method.getVcardFile(context);
+				
 				return file;
 			} catch (final IOException e) {
 				Log.e("123123", "Unable to get vcard file");
@@ -294,7 +328,8 @@ public class MethodActivity extends Activity implements OnClickListener {
 			super.onPostExecute(result);
 			((MethodActivity)context).showProgress(false);
 			if (context != null) {
-				Toast.makeText(context, "Contacts are ready to backup", Toast.LENGTH_SHORT).show();
+				((MethodActivity)context).sendBackupedFile();
+				//Toast.makeText(context, "Contacts are ready to backup", Toast.LENGTH_SHORT).show();
 				context = null;
 			}
 			if (result != null) {

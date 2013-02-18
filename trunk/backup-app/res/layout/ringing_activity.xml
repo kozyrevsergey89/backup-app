@@ -9,7 +9,7 @@
         android:id="@+id/discad_button"
         android:layout_height="wrap_content" 
         android:layout_width="wrap_content"
-        android:text="Swith off"
+        android:text="@string/founded"
         android:layout_gravity="center"
         android:padding="40dp"
         android:textStyle="bold"

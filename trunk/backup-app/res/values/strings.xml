@@ -1,8 +1,13 @@
 <resources>
 
-    <string name="app_name">backup-app</string>
+    <string name="app_name">AFG Mobile Protection</string>
     <string name="backup_vcard">backup contacts</string>
     <string name="restore_vcard">restore contacts</string>
     <string name="enable_wipe">enable wipe</string>
+    <string name="choose_sound">choose sound</string>
+    <string name="default_sound">use default sound</string>
+    <string name="founded">Found</string>
+    <string name="no_connection">No connection, try again later</string>
+    
 
 </resources>
