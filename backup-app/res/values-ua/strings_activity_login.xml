@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Логін</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in_register"><b>Вхід</b></string>
+    <string name="action_sign_in_short">Вхід</string>
+    <string name="menu_forgot_password">Відновити останній пароль</string>
+    <string name="login_progress_signing_in">Вхід&#8230;</string>
+    <string name="error_incorrect_password">Неправильний пароль</string>
+    <string name="error_field_required">Це поле є обов\'язковим</string>
+    <string name="progress">Будь ласка зачекайте&#8230;</string>
+
+</resources>

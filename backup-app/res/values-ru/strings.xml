@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">AFG Mobile Protection</string>
+    <string name="backup_vcard">создать резервную копию контактов</string>
+    <string name="restore_vcard">восстановить контакты из резервной копии</string>
+    <string name="enable_wipe">разрешить удаленную очистку</string>
+    <string name="choose_sound">выбрать мелодию</string>
+    <string name="default_sound">используется мелодия по умолчанию</string>
+    <string name="founded">Нашелся!</string>
+    <string name="no_connection">Отсутствует сетевое соединение</string>
+
+</resources>
