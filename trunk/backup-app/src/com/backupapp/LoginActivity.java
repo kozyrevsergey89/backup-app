@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -66,6 +67,15 @@ public class LoginActivity extends Activity {
 
 		setContentView(R.layout.activity_login);
 		
+		//check if agreed with terms of use
+		String checkStr = SharedUtils.getFromShared(this, "TermsAgreed"); 
+		if ( checkStr == null) {
+			Intent intent = new Intent(getApplicationContext(), TermsOfUseActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			
+		}
+			
+			
 		// Set up the login form.
 		mLogin = getIntent().getStringExtra(EXTRA_LOGIN);
 		mLoginView = (EditText) findViewById(R.id.login);

@@ -50,6 +50,10 @@
             android:name="com.backupapp.MethodActivity"
             android:screenOrientation="portrait"
             />
+        <activity 
+            android:name="com.backupapp.TermsOfUseActivity"
+            android:screenOrientation="portrait"
+            />
         
         <activity 
             android:name="com.backupapp.RingingActivity"

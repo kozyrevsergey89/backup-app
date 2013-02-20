@@ -141,7 +141,8 @@ public class MethodActivity extends Activity implements OnClickListener {
 			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
 			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
 			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Sound");
-			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
 			this.startActivityForResult(intent, RESULT_SOUND);
 		default:
 			break;
