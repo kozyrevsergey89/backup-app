@@ -24,7 +24,7 @@ public class RingingActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ringing_activity);
 		soundUriString = SharedUtils.getFromShared(this, "SOUND_URI_STRING");
-		if (soundUriString == null) {
+		if (soundUriString == null ) {
 			notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 		} else  {
 			notification = Uri.parse(soundUriString);
