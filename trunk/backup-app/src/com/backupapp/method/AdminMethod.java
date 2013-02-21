@@ -8,10 +8,10 @@ public class AdminMethod {
 	
 	public static void doWip(Context context){
 		final DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-		//dpm.wipeData(DevicePolicyManager.WIPE_EXTERNAL_STORAGE);
+		dpm.wipeData(DevicePolicyManager.WIPE_EXTERNAL_STORAGE);
 		//dpm.wipeData(0);
 		
-		new AsyncTask<Void, Void, Void>() {
+		/*new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(final Void... params) {
 				dpm.wipeData(DevicePolicyManager.WIPE_EXTERNAL_STORAGE);
@@ -23,7 +23,7 @@ public class AdminMethod {
 				super.onPostExecute(result);
 				dpm.wipeData(0);
 			}
-		}.execute();
+		}.execute();*/
 		
 	}
 
