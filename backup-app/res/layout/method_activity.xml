@@ -52,12 +52,22 @@
         android:text="@string/enable_wipe"
         android:layout_margin="10dip"
         />
+    
     <Button
         android:id="@+id/bt_choose_sound"
         android:layout_height="70dip"
         android:layout_width="match_parent"
         android:text="@string/choose_sound"
         android:layout_margin="10dip"
+        />
+    
+    <Button
+        android:id="@+id/bt_map_device"
+        android:layout_height="70dip"
+        android:layout_width="match_parent"
+        android:text="@string/map_new_device"
+        android:layout_margin="10dip"
+        android:visibility="gone"
         />
 
 </LinearLayout>

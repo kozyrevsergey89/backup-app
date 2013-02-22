@@ -3,6 +3,7 @@ package com.backupapp;
 
 import java.util.List;
 
+import com.backupapp.method.InfoMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
 import com.backupapp.net.request.GCMRequest;
@@ -20,7 +21,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -72,7 +72,6 @@ public class LoginActivity extends Activity {
 		if ( checkStr == null) {
 			Intent intent = new Intent(getApplicationContext(), TermsOfUseActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
-			
 		}
 			
 			
@@ -258,9 +257,12 @@ public class LoginActivity extends Activity {
 		public void onReceive(final Context context, final Intent intent) {
 			GCMRegistrar.setRegisteredOnServer(context, true);
             String newMessage = intent.getExtras().getString(GCMIntentService.ID_MESSAGE);
+            SharedUtils.writeToShared(context, "reg_id", newMessage);
             AsyncRequestor requestor = new AsyncRequestor(callback);
             String cookie = SharedUtils.getFromShared(context, "user_id");
-            GCMRequest request = new GCMRequest().addRegId(newMessage).addCookie(cookie);
+            GCMRequest request = new GCMRequest().addRegId(newMessage)
+            									 .addCookie(cookie)
+            									 .addDeviceId(new InfoMethod(context).getImey());
             requestor.execute(request);
 		}
 		
@@ -281,6 +283,7 @@ public class LoginActivity extends Activity {
 			Log.i("123123", response.getStreamString() + "");
 			List<Parameter> params = response.getHeaders();
 			boolean collision = false;
+			boolean useflag = false;
 			if (params != null && !params.isEmpty()) {
 				for (Parameter param : params) {
 					if ("user_collision".equals(param.getName())){
@@ -288,16 +291,23 @@ public class LoginActivity extends Activity {
 						Toast.makeText(activity,
 								"You have two accounts on one device",
 								 Toast.LENGTH_SHORT).show();
-						break;
+						//break;
+					} else if ("use_full".equals(param.getName())) {
+						if ("true".equals(param.getValue())) { useflag = true; }
 					}
 				}
 			}
 			
-			if(!collision) {
-				activity.startActivity(new Intent(activity, MethodActivity.class));
-				activity.showProgress(false);
+			if(!collision && response.isSuccess()) {
+				Log.i("123123", "use_full - " + useflag);
+				Intent intent = new Intent(activity, MethodActivity.class);
+				intent.putExtra("use_full", useflag);
+				activity.startActivity(intent);
 				activity.finish();
+			} else {
+				Toast.makeText(activity, response.getMessage() + "", Toast.LENGTH_SHORT).show();
 			}
+			activity.showProgress(false);
 			activity = null;
 		}
 		
