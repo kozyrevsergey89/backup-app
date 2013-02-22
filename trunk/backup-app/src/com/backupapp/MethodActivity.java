@@ -29,9 +29,11 @@ import android.widget.Toast;
 
 import com.backupapp.method.BackupAdminReceiver;
 import com.backupapp.method.ContactsMethod;
+import com.backupapp.method.InfoMethod;
 import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
 import com.backupapp.net.request.AdminFlagRequest;
+import com.backupapp.net.request.GCMRequest;
 import com.backupapp.net.request.GetBackFile;
 import com.backupapp.net.request.GetFileRequest;
 import com.backupapp.utils.SharedUtils;
@@ -43,14 +45,14 @@ public class MethodActivity extends Activity implements OnClickListener {
 	
 	public static final int RESULT_ENABLE = 1, RESULT_SOUND=5;
 	private String userId;
-	private Button backup, restore, enableWipe, chooseSound;
+	private Button backup, restore, enableWipe, chooseSound, mapDevice;
 	private DevicePolicyManager mDPM;
 	private ComponentName mDeviceAdminSample;
-    boolean mAdminActive;
+    private boolean mAdminActive;
+    private boolean useflag = false; 
 	private View statusView;
 	public String url, soundUriString;
 	private ContactLader contactLader;
-	
 	
 
 	@Override
@@ -58,15 +60,31 @@ public class MethodActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.method_activity);
 		userId = SharedUtils.getFromShared(this, "user_id");
+		
+		Intent intent = getIntent();
+		if(intent != null && !intent.getExtras().isEmpty()) {
+			useflag = intent.getExtras().getBoolean("use_full");
+		}
+		
 		backup = (Button) findViewById(R.id.bt_backup_vcf);
 		restore = (Button) findViewById(R.id.bt_restore_vcf);
 		enableWipe = (Button) findViewById(R.id.bt_enable_wipe);
 		chooseSound = (Button) findViewById(R.id.bt_choose_sound);
+		mapDevice = (Button) findViewById(R.id.bt_map_device);
 		statusView = (View) findViewById(R.id.sstatus);
+		
+		if (!useflag) {
+			backup.setVisibility(View.GONE);
+			enableWipe.setVisibility(View.GONE);
+			chooseSound.setVisibility(View.GONE);
+			mapDevice.setVisibility(View.VISIBLE);
+		}
+		
 		backup.setOnClickListener(this);
 		restore.setOnClickListener(this);
 		enableWipe.setOnClickListener(this);
 		chooseSound.setOnClickListener(this);
+		mapDevice.setOnClickListener(this);
 		contactLader = new ContactLader(this);
 		//contactLader.execute();
 		mDPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -101,10 +119,14 @@ public class MethodActivity extends Activity implements OnClickListener {
 			backup.setVisibility(View.VISIBLE);
 			restore.setVisibility(View.VISIBLE);
 			enableWipe.setVisibility(View.VISIBLE);
+			chooseSound.setVisibility(View.VISIBLE);
+			//if (!useflag) { mapDevice.setVisibility(View.VISIBLE); }
 		} else {
 			backup.setVisibility(View.GONE);
 			restore.setVisibility(View.GONE);
 			enableWipe.setVisibility(View.GONE);
+			mapDevice.setVisibility(View.GONE);
+			chooseSound.setVisibility(View.GONE);
 		}
 	}
 	
@@ -144,6 +166,45 @@ public class MethodActivity extends Activity implements OnClickListener {
 			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
 			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
 			this.startActivityForResult(intent, RESULT_SOUND);
+			break;
+		case R.id.bt_map_device:
+			showProgress(true);
+			String regId = SharedUtils.getFromShared(this, "reg_id");
+			GCMRequest request = new GCMRequest()
+								.addCookie(userId)
+								.addRegId(regId)
+								.addDeviceId(new InfoMethod(this).getImey())
+								.addUseThisHeader();
+			
+			sendRequest(new AsyncCallback() {
+				@Override
+				public void processResponse(final Response response) {
+					Log.i("123123", response.getResultCode() + "");
+					Log.i("123123", response.getMessage() + "");
+					Log.i("123123", response.getStreamString() + "");
+					if (response.isSuccess()) {
+						List<Parameter> headers = response.getHeaders();
+						if (headers != null && !headers.isEmpty()) {
+							for (Parameter param : headers) {
+								if("use_full".equals(param.getName())) {
+									if ("true".equals(param.getValue())) {
+										useflag = true;
+										Log.i("123123", "use_full - " + param.getValue());
+									} else {
+										Toast.makeText(getBaseContext(), "dsdsd", Toast.LENGTH_SHORT).show();
+									}
+									showProgress(false);
+									break;
+								}
+							}
+						}
+					} else {
+						showProgress(false);
+					}
+				}
+			}, request);
+			//showProgress(false);
+			break;
 		default:
 			break;
 		}
@@ -181,7 +242,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 				Log.i("SOUND", "picked sound: " + soundUriString);
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				soundUriString = null;
-				Toast.makeText(this, R.string.default_sound, Toast.LENGTH_SHORT);
+				Toast.makeText(this, R.string.default_sound, Toast.LENGTH_SHORT).show();
 			}
 			SharedUtils.writeToShared(this, "SOUND_URI_STRING", soundUriString);
 		}
@@ -201,7 +262,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 		AsyncRequestor requestor = new AsyncRequestor(callback);
 		requestor.execute(request);
 	}
-
+	
 	private static class UrlRequestCallback extends AsyncCallback {
 
 		private MethodActivity activity;

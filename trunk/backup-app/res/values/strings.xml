@@ -5,6 +5,7 @@
     <string name="restore_vcard">restore contacts</string>
     <string name="enable_wipe">enable wipe</string>
     <string name="choose_sound">choose sound</string>
+    <string name="map_new_device">map new device</string>
     <string name="default_sound">use default sound</string>
     <string name="founded">Found</string>
     <string name="no_connection">No connection, try again later</string>

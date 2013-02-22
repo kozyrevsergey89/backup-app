@@ -29,6 +29,16 @@ public class GCMRequest extends Request<Serializable>{
 		return this;
 	}
 	
+	public GCMRequest addDeviceId(final String deviceId) {
+		setPostEntities("device_id", deviceId);
+		return this;
+	}
+	
+	public GCMRequest addUseThisHeader() {
+		setHeaders("reinit", "true");
+		return this;
+	}
+	
 	public GCMRequest addCookie(final String cookie) {
 		setHeaders("Cookie", "user_id=" + cookie);
 		return this;

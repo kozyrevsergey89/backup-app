@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class InfoMethod {
 	
-	private String phone, ip, imey;
+	private String phone, ip;
 	private String accCommaSeq="";
 	
 	private Context context;

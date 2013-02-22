@@ -5,6 +5,7 @@
     <string name="restore_vcard">восстановить контакты из резервной копии</string>
     <string name="enable_wipe">разрешить удаленную очистку</string>
     <string name="choose_sound">выбрать мелодию</string>
+    <string name="map_new_device">привязать новое устройство</string>
     <string name="default_sound">используется мелодия по умолчанию</string>
     <string name="founded">Нашелся!</string>
     <string name="no_connection">Отсутствует сетевое соединение</string>
