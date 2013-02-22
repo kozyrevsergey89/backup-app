@@ -10,6 +10,7 @@
     <string name="founded">Found</string>
     <string name="no_connection">No connection, try again later</string>
     <string name="agree">Agree</string>
+    <string name="not_mapped">This device not mapped to AVG Mobile Protection!</string>
     <string name="terms_text">УСЛОВИЯ ИСПОЛЬЗОВАНИЯ AFG MOBILE PROTECTION
 Пожалуйста, прочтите этот документ в полном объеме перед использованием AFG Mobile Protection.
 - Вы не можете использовать сервис AFG Mobile Protection в коммерческих целях. Сервис AFG Mobile Protection предоставляется исключительно для личного, некоммерческого использования.

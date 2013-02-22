@@ -191,7 +191,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 										useflag = true;
 										Log.i("123123", "use_full - " + param.getValue());
 									} else {
-										Toast.makeText(getBaseContext(), "dsdsd", Toast.LENGTH_SHORT).show();
+										Toast.makeText(getBaseContext(), R.string.not_mapped, Toast.LENGTH_SHORT).show();
 									}
 									showProgress(false);
 									break;
