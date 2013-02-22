@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class InfoMethod {
 	
-	private String phone, ip;
+	private String phone, ip, imey;
 	private String accCommaSeq="";
 	
 	private Context context;
@@ -37,9 +37,17 @@ public class InfoMethod {
 		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		phone = tm.getLine1Number();
 		//IN FUTURE UNLOCK 
-		//String imey = tm.getdeviceId(); 
-		Log.i("BACK", "phone number"+phone);
+		String imey = tm.getDeviceId(); 
+		Log.i("BACK", "imei:  "+imey);
 		return phone;
+	}
+	
+	public String getImey(){
+		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		//IN FUTURE UNLOCK 
+		String imey = tm.getDeviceId(); 
+		Log.i("BACK", "imei:  "+imey);
+		return imey;
 	}
 	
 	public String getIp(){

@@ -53,6 +53,7 @@
         <activity 
             android:name="com.backupapp.TermsOfUseActivity"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             />
         
         <activity 
