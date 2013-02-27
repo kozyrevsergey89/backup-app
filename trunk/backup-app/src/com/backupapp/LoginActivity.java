@@ -218,7 +218,7 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		public void processResponse(final Response response) {
-			if(response.isSuccess()) {
+			if(response.isSuccess() && !response.getCookies().isEmpty()) {
 				for(Parameter cookie : response.getCookies()) {
 					if ("user_id".equals(cookie.getName())) {
 						SharedUtils.writeToShared(context, "user_id", cookie.getValue());
@@ -237,7 +237,7 @@ public class LoginActivity extends Activity {
 				}
 			} else {
 				((LoginActivity)context).showProgress(false);
-				Toast.makeText(context, "Registration failed, try to connect later", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, R.string.login_error, Toast.LENGTH_SHORT).show();
 				//context.startActivity(new Intent(context, MethodActivity.class));
 				//((LoginActivity)context).finish();
 			}
