@@ -11,6 +11,7 @@
     <string name="no_connection">No connection, try again later</string>
     <string name="agree">Agree</string>
     <string name="not_mapped">This device not mapped to AVG Mobile Protection!</string>
+    <string name="second_user">Current device already has registered user</string>
     <string name="login_error">Authentification failed,incorrect password or login</string>
     <string name="terms_text">УСЛОВИЯ ИСПОЛЬЗОВАНИЯ AFG MOBILE PROTECTION
 Пожалуйста, прочтите этот документ в полном объеме перед использованием AFG Mobile Protection.
