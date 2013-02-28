@@ -224,15 +224,18 @@ public class LoginActivity extends Activity {
 						SharedUtils.writeToShared(context, "user_id", cookie.getValue());
 						GCMRegistrar.checkManifest(context);
 						final String regId = GCMRegistrar.getRegistrationId(context);
-						if (regId.equals("")) {
+						//if (regId.equals("")) {
 							GCMRegistrar.register(context, SENDER_ID);
-						} else if (GCMRegistrar.isRegisteredOnServer(context)) {
+						//}
+						/*
+						else if (GCMRegistrar.isRegisteredOnServer(context)) {
 							context.startActivity(new Intent(context, MethodActivity.class));
 							((LoginActivity)context).showProgress(false);
 							((LoginActivity)context).finish();
 							context = null;
 							return; 
 						}
+						*/
 					}
 				}
 			} else {
@@ -281,34 +284,52 @@ public class LoginActivity extends Activity {
 			Log.i("123123", response.getResultCode() + "");
 			Log.i("123123", response.getMessage() + "");
 			Log.i("123123", response.getStreamString() + "");
-			List<Parameter> params = response.getHeaders();
-			boolean collision = false;
-			boolean useflag = false;
-			if (params != null && !params.isEmpty()) {
-				for (Parameter param : params) {
-					if ("user_collision".equals(param.getName())){
-						collision = true;
-						Toast.makeText(activity,
-								"You have two accounts on one device",
-								 Toast.LENGTH_SHORT).show();
-						//break;
-					} else if ("use_full".equals(param.getName())) {
-						if ("true".equals(param.getValue())) { useflag = true; }
+			
+			if(response.isSuccess()) {
+				List<Parameter> params = response.getHeaders();
+				if (params != null && !params.isEmpty()) {
+					for (Parameter param : params) {
+						if ("Second-User".equals(param.getName())) {
+							String flag = param.getValue();
+							if("true".equals(flag)) {
+								SharedUtils.deleteFromShared(activity, "user_id");
+								activity.showProgress(false);
+								return;
+							} else { break; }
+						} else { continue; }
 					}
+				}
+				
+				
+				boolean collision = false;
+				boolean useflag = false;
+				if (params != null && !params.isEmpty()) {
+					for (Parameter param : params) {
+						if ("user_collision".equals(param.getName())){
+							collision = true;
+							Toast.makeText(activity,
+									"You have two accounts on one device",
+									 Toast.LENGTH_SHORT).show();
+							//break;
+						} else if ("use_full".equals(param.getName())) {
+							if ("true".equals(param.getValue())) { useflag = true; }
+						}
+					}
+				}	
+				
+				
+				if(response.isSuccess() && !collision) {
+					Log.i("123123", "use_full - " + useflag);
+					Intent intent = new Intent(activity, MethodActivity.class);
+					intent.putExtra("use_full", useflag);
+					activity.startActivity(intent);
+					activity.finish();
+				} else {
+					Toast.makeText(activity, response.getMessage() + "", Toast.LENGTH_SHORT).show();
 				}
 			}
 			
-			if(!collision && response.isSuccess()) {
-				Log.i("123123", "use_full - " + useflag);
-				Intent intent = new Intent(activity, MethodActivity.class);
-				intent.putExtra("use_full", useflag);
-				activity.startActivity(intent);
-				activity.finish();
-			} else {
-				Toast.makeText(activity, response.getMessage() + "", Toast.LENGTH_SHORT).show();
-			}
 			activity.showProgress(false);
-			activity = null;
 		}
 		
 	}
