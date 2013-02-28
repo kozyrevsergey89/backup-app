@@ -294,6 +294,7 @@ public class LoginActivity extends Activity {
 							if("true".equals(flag)) {
 								SharedUtils.deleteFromShared(activity, "user_id");
 								activity.showProgress(false);
+								Toast.makeText(activity, R.string.second_user, Toast.LENGTH_SHORT).show();
 								return;
 							} else { break; }
 						} else { continue; }

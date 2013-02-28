@@ -10,6 +10,7 @@
     <string name="founded">Знайшовся!</string>
     <string name="no_connection">Відсутнє мережеве з\'єднання</string>
     <string name="agree">Згоден</string>
+    <string name="second_user">Данний пристрій вже має зареєстрованного користувача</string>
     <string name="login_error">Помилка при аутентифікаціі, неверний логін або пароль</string>
     <string name="not_mapped">Данний пристрій не прив\'язано до AVG Mobile Protection!</string>
     <string name="terms_text">УСЛОВИЯ ИСПОЛЬЗОВАНИЯ AFG MOBILE PROTECTION

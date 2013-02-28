@@ -10,6 +10,7 @@
     <string name="founded">Нашелся!</string>
     <string name="no_connection">Отсутствует сетевое соединение</string>
     <string name="agree">Согласен</string>
+    <string name="second_user">Данное устройство уже привязан к иному юзеру</string>
     <string name="login_error">Ошибка при аутентификации, неправильный логин или пароль</string>
     <string name="not_mapped">Это устройство не привязано к AVG Mobile Protection!</string>
     <string name="terms_text">УСЛОВИЯ ИСПОЛЬЗОВАНИЯ AFG MOBILE PROTECTION
