@@ -19,4 +19,13 @@ public class SharedUtils {
 		if (prefs.contains(key)) { editor.remove(key); }
 		editor.putString(key, value).commit();
 	}
+	
+	public static void deleteFromShared(final Context context, final String key) {
+		SharedPreferences prefs = context.getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE);
+		if (prefs.contains(key)) {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.remove(key);
+			editor.commit();
+		}
+	}
 }

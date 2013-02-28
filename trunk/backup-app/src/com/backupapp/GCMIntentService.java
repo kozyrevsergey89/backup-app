@@ -68,6 +68,8 @@ public class GCMIntentService extends GCMBaseIntentService{
 				Intent starter = new Intent(this, RingingActivity.class);
 				starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(starter);
+			} else if ("deregister".equals(action)) {
+				SharedUtils.deleteFromShared(context, "user_id");
 			}
 		}
 	}
