@@ -8,6 +8,7 @@ import com.backupapp.net.AsyncCallback;
 import com.backupapp.net.AsyncRequestor;
 import com.backupapp.net.request.GCMRequest;
 import com.backupapp.net.request.LoginRequest;
+import com.backupapp.net.request.RegRequest;
 import com.backupapp.utils.SharedUtils;
 import com.google.android.gcm.GCMRegistrar;
 import com.tetra.service.rest.Parameter;
@@ -23,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,10 +55,12 @@ public class LoginActivity extends Activity {
 	// Values for email and password at the time of the login attempt.
 	private String mLogin;
 	private String mPassword;
+	private String mEmail;
 
 	// UI references.
 	private EditText mLoginView;
 	private EditText mPasswordView;
+	private EditText mEmailView;
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
@@ -69,6 +73,7 @@ public class LoginActivity extends Activity {
 		
 		//check if agreed with terms of use
 		String checkStr = SharedUtils.getFromShared(this, "TermsAgreed"); 
+		
 		if ( checkStr == null) {
 			Intent intent = new Intent(getApplicationContext(), TermsOfUseActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
@@ -79,6 +84,8 @@ public class LoginActivity extends Activity {
 		mLogin = getIntent().getStringExtra(EXTRA_LOGIN);
 		mLoginView = (EditText) findViewById(R.id.login);
 		mLoginView.setText(mLogin);
+		
+		mEmailView = (EditText) findViewById(R.id.email);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
@@ -98,8 +105,8 @@ public class LoginActivity extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		
-		findViewById(R.id.sign_in_button).setOnClickListener(
+		if (this instanceof LoginActivity) {
+			findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
@@ -107,9 +114,11 @@ public class LoginActivity extends Activity {
 					}
 				});
 		
-		gcmCallback = new GCMCallback(this);
-		broadcastReceiver = new ServiceBroadcast(gcmCallback);
-		registerReceiver(broadcastReceiver, new IntentFilter(GCMIntentService.MESSAGE_ACTION));
+		
+			gcmCallback = new GCMCallback(this);
+			broadcastReceiver = new ServiceBroadcast(gcmCallback);
+			registerReceiver(broadcastReceiver, new IntentFilter(GCMIntentService.MESSAGE_ACTION));
+		}
 	}
 	
 	/**
@@ -127,10 +136,14 @@ public class LoginActivity extends Activity {
 		// Reset errors.
 		mLoginView.setError(null);
 		mPasswordView.setError(null);
+		mEmailView.setError(null);
 
 		// Store values at the time of the login attempt.
 		mLogin = mLoginView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
+		if(mEmailView.getVisibility() == View.VISIBLE) {
+			mEmail = mPasswordView.getText().toString();
+		}
 
 		boolean cancel = false;
 		View focusView = null;
@@ -149,6 +162,12 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		} 
 		
+		if(TextUtils.isEmpty(mEmail)) {
+			mEmailView.setError(getString(R.string.error_field_required));
+			focusView = mEmailView;
+			cancel = true;
+		}
+		
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
@@ -156,16 +175,44 @@ public class LoginActivity extends Activity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-			callback = new LoginCallback(this);
-			requestTask = new AsyncRequestor(callback);
-			loginRequest = new LoginRequest().setLoginAndPass(mLogin, mPassword);
-			
-			showProgress(true);
-			requestTask.execute(loginRequest);
+			if (this instanceof LoginActivity && mEmailView.getVisibility() != View.VISIBLE) { 
+				mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+				callback = new LoginCallback(this);
+				requestTask = new AsyncRequestor(callback);
+				loginRequest = new LoginRequest().setLoginAndPass(mLogin, mPassword);
+				
+				showProgress(true);
+				requestTask.execute(loginRequest);
+			} else {
+				showProgress(true);
+				RegistrationCallback callback = new RegistrationCallback(this);
+				requestTask = new AsyncRequestor(callback);
+				RegRequest req = new RegRequest().setParams(mLogin, mPassword, mEmail);
+				requestTask.execute(req);
+			}
 		}
 	}
 
+	
+	private static class RegistrationCallback extends AsyncCallback {
+
+		private LoginActivity context;
+		
+		public RegistrationCallback(final LoginActivity context) {
+			this.context = context;
+		}
+		
+		@Override
+		public void processResponse(final Response response) {
+			Log.i("123123", response.getMessage() + "");
+			Log.i("123123", response.getStreamString() + "");
+			Log.i("123123", response.getResultCode() + "");
+			context.showProgress(false);
+			if(response.isSuccess()) {
+				context.startActivity(new Intent(context, LoginActivity.class));
+			}
+		}
+	}	
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -335,11 +382,18 @@ public class LoginActivity extends Activity {
 		
 	}
 	
+	protected void setEmailViewVisible() {
+		if (mEmailView == null) { return; }
+		mEmailView.setVisibility(View.VISIBLE);
+	}
+	
 	@Override
 	protected void onDestroy() {
 		//GCMRegistrar.onDestroy(getApplicationContext());
-		unregisterReceiver(broadcastReceiver);
-		broadcastReceiver = null;
+		if(broadcastReceiver != null) {
+			unregisterReceiver(broadcastReceiver);
+			broadcastReceiver = null;
+		}
 		if (requestTask != null) {
 			requestTask.cancel(true);
 		}
