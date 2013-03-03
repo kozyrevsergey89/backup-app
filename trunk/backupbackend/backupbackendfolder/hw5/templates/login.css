@@ -1,0 +1,128 @@
+* {margin: 0; padding: 0;}
+
+html {min-height:100%; position: relative;}
+
+body {
+    text-align: center;
+    color: #ffffff;
+    height: 100%;
+    overflow: hidden;
+    font-family: Calibri;
+}
+
+header {
+    min-width: 700px;
+    height: 160px;
+    background: #187a01;
+    margin-bottom: 150px;
+}
+
+#logo {
+    width: 405px;
+    padding-left: 125px;
+    height: 130px;
+    margin: 0 auto;
+    padding-top: 10px;
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 100px;
+    background: url(img/logo.png) left center no-repeat;
+    text-shadow: 2px 8px 8px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=8);    
+}
+
+#logo div {
+    font-size: 18px;
+    margin-top: -25px;
+    line-height: 0;
+}
+
+input {
+    width: 260px;
+    height: 40px;
+    font-size: 30px;
+}
+
+#content {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.button {
+    width: 140px;
+    margin: 20px 0 120px 110px;
+    border-top: 1px solid #01a507;
+    background: #8aa68a;
+    background: -webkit-gradient(linear, left top, left bottom, from(#01a507), to(#8aa68a));
+    background: -webkit-linear-gradient(top, #01a507, #8aa68a);
+    background: -moz-linear-gradient(top, #01a507, #8aa68a);
+    background: -ms-linear-gradient(top, #01a507, #8aa68a);
+    background: -o-linear-gradient(top, #01a507, #8aa68a);
+    -webkit-border-radius: 13px;
+    -moz-border-radius: 13px;
+    border-radius: 13px;
+    -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+    -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+    box-shadow: rgba(0,0,0,1) 0 1px 0;
+    text-shadow: rgba(0,0,0,.4) 0 1px 0;
+    color: white;
+    font-size: 21px;
+    text-decoration: none;
+    vertical-align: middle;
+}
+   
+.button:hover {
+    border-top-color: #187a01;
+    background: #187a01;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.button:active {
+    border-top-color: #0d730e;
+    background: #0d730e;
+}
+
+table {
+    margin: 0 auto;
+}
+
+footer {
+    background: #187a01;
+    width: 100%;
+    margin-top: 100px;
+    position: absolute;
+    bottom: 0;
+    text-shadow: 2px 8px 8px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=8);   
+}
+
+#footer_nav {
+    margin: 20px 0 10px;
+}
+
+#footer_nav a {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: 100;
+}
+
+#copyright {
+    font-weight: 100;
+    margin-bottom: 10px;
+}
+
+.label {
+    text-align: left; 
+    padding-right: 10px;
+    color: #000000;
+    font-size: 36px;
+    font-weight: 100;
+}
+
+tr {
+	height: 50px;
+}
+
+.error {color: red}
