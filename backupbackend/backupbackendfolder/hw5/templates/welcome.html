@@ -1,0 +1,111 @@
+﻿<!DOCTYPE HTML>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="ajax.js"></script>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    
+	<title>Choose</title>
+</head>
+
+<body>
+
+<header>
+    <div id="logo">
+        AFG Mobile Protection
+        <div>уникальное решение для защиты Вашего телефона</div>
+    </div>
+    <div id="user_name">Здравствуйте,<br /><span id="name">{{username}}</span></div>
+    <a href="/logout" id="logout">ВЫЙТИ</a>
+</header>
+
+<div id="target">
+    
+    <div id="check_my_backup" class="info_block transition" data-val="2">
+        <div class="for_perform">
+            <div class="reload" title="Обновить"></div>
+            <table id="backup_table">
+                <tr>
+                    <td>Резервная копия:</td>
+                    <td id="backup_status"></td>
+                </tr>
+                <tr>
+                    <td>Дата последнего сохранения:</td>
+                    <td id="timestamp"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="get_my_phone_info" class="info_block transition" data-val="4">
+        <div class="for_perform">
+            <div class="reload" title="Обновить"></div>
+            <table id="info_table">
+                <tr>
+                    <td>Номер телефона:</td>
+                    <td id="phone"></td>
+                </tr>
+                <tr>
+                    <td>IP:</td>
+                    <td id="ip"></td>
+                </tr>
+                <tr>
+                    <td>Аккаунты:</td>
+                    <td id="accounts"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="get_gps" class="info_block transition" data-val="3">
+        <div class="for_perform">
+            <div id="map_to"></div>
+            <div class="reload" title="Обновить"></div>
+            <div id="not_current">данные неактуальны, попробуйте позже</div>
+        </div>
+    </div>
+
+    <div id="find_phone" class="info_block transition" data-val="5">
+        <div class="for_perform">
+            <div class="reload" title="Обновить"></div>
+            <table>
+                <tr>
+                    <td id="find_phone_result"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="wipe" class="info_block transition" data-val="1">
+        <div class="for_perform">
+            <div class="reload" title="Обновить"></div>
+            <table id="wipe_table">
+                <tr>
+                    <td id="wipe_result"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div id="coming_soon" class="transition">
+        <div class="for_perform">
+        </div>
+    </div>
+    
+</div>
+
+<footer>
+    <div id="footer_nav">
+        <a href="#" target="_blank">О нас</a>
+        <a href="http://afgmp.com/">Перейти на сайт</a>
+        <a href="/terms_of_use" target="_blank">Условия использования</a>
+        <a href="/privacy_policy" target="_blank">Политика конфиденциальности</a>
+    </div>
+    <div id="copyright">Art Finance Group &copy 2013</div>
+</footer>
+
+</body>
+</html>

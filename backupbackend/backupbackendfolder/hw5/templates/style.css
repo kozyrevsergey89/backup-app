@@ -1,0 +1,268 @@
+* {margin: 0; padding: 0;}
+
+html {min-height:100%; position: relative;}
+
+body {
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: Calibri;
+}
+
+header {
+    min-width: 700px;
+    height: 160px;
+    background: #187a01;
+    margin-bottom: 50px;
+}
+
+#logo {
+    width: 405px;
+    padding-left: 125px;
+    height: 130px;
+    margin: 0 auto;
+    padding-top: 10px;
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 100px;
+    background: url(img/logo.png) left center no-repeat;
+    text-shadow: 2px 8px 8px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=8);    
+}
+
+#logo div {
+    font-size: 18px;
+    margin-top: -25px;
+    line-height: 0;
+}
+
+#user_name {
+    position: absolute;
+    right: 15px;
+    top: 25px;
+    color: #d2cccc;
+    font-weight: 100;
+}
+
+#logout {
+    width: 60px;
+    height: 30px;
+    color: #514e42;
+    display: block;
+    position: absolute;
+    right: 30px;
+    top: 70px;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: normal;
+    text-decoration: none;
+    vertical-align: middle;
+    background: #e1ca6d;
+}
+
+#logout:hover {
+    border-top-color: #ff8400;
+    background: #ff8400;
+}
+
+#logout:active {
+    border-top-color: #ff6f00;
+    background: #ff6f00;
+}
+
+#target {
+    width: 90%;
+    height: 100%;
+    margin: 0 auto 100px;
+}
+
+#wipe {
+    height: 250px;
+    width: 500px;
+    background: url(img/wipe.png) 0 0 no-repeat;
+    margin: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px #000000;
+    display: inline-block;
+}
+
+.after_load {
+    background: none !important;
+}
+
+#check_my_backup {
+    height: 250px;
+    width: 500px;
+    background: url(img/backup.png) 0 0 no-repeat;
+    margin: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px #000000;
+    display: inline-block;
+}
+
+#get_gps {
+    height: 250px;
+    width: 500px;
+    background: url(img/get_gps.png) 0 0 no-repeat;
+    margin: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px #000000;
+    display: inline-block;
+}
+
+#find_phone {
+    height: 250px;
+    width: 500px;
+    background: url(img/find_phone.png) 0 0 no-repeat;
+    margin: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px #000000;
+    display: inline-block;    
+}
+
+#coming_soon {
+    height: 250px;
+    width: 500px;
+    background: url(img/coming_soon.png) 0 0 no-repeat;
+    margin: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px #000000;
+    display: inline-block;
+}
+
+#coming_soon .for_perform {
+    background: url(img/coming_soon_2.png) 0 0 no-repeat;
+}
+
+#map_to {
+    height: 250px;
+}
+
+#get_my_phone_info {
+    height: 250px;
+    width: 500px;
+    background: url(img/phone_info.png) 0 0 no-repeat;
+    margin: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px #000000;
+    display: inline-block;
+}
+
+table {
+    position: relative;
+    left: 100px;
+    top: 65px;
+    z-index: 10;
+}
+
+#wipe table {
+    left: 110px;
+    top: 100px;
+}
+
+#find_phone table {
+    left: 160px;
+    top: 100px;
+}
+
+td {
+    text-align: left;
+    padding-left: 10px;
+    vertical-align: top;
+}
+
+.transition {
+    -webkit-transition: background-position 0.6s ease;
+	-moz-transition: background-position 0.6s ease;
+	-o-transition-property: background-position 0.6s ease;
+}
+
+.transition:hover {
+    background-position: 0 -250px !important;
+}
+
+.loading {
+    background: url(img/loading.gif) center center no-repeat #cacbcf !important;
+}
+
+.for_perform {
+    position: absolute;
+    z-index: -1;
+    height: 250px;
+    width: 500px;
+    background: url(img/send.png) 0 0 no-repeat;
+    border-radius: 7px;
+    overflow: auto;
+}
+
+.after_load .for_perform {
+    background: #187a01;
+    z-index: 1;
+}
+
+.reload {
+    position: absolute;
+    opacity: 0;
+    left: 35px;
+    top: 10px;
+    width: 50px;
+    height: 50px;
+    background: url(img/reload.png) no-repeat;
+}
+
+.after_load:hover .reload{
+    opacity: 0.7;
+}
+
+.reload:hover {
+    opacity: 1 !important;
+    cursor: pointer;
+}
+
+.info_block {
+    cursor: pointer;
+}
+
+#not_current {
+    position: absolute;
+    bottom: 20px;
+    background: #A9A9A9;
+    left: 115px;
+}
+
+footer {
+    background: #187a01;
+    width: 100%;
+    margin-top: 100px;
+    position: absolute;
+    bottom: 0;
+    text-shadow: 2px 8px 8px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=8);   
+}
+
+#footer_nav {
+    margin: 20px 0 10px;
+}
+
+#footer_nav a {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: 100;
+}
+
+#copyright {
+    font-weight: 100;
+    margin-bottom: 10px;
+}
+
+.text_info {
+    color: #000000;
+    text-align: left;
+    margin: 50px auto;
+    width: 700px;
+}
+
+.text_info p {
+    margin-bottom: 10px;
+}
