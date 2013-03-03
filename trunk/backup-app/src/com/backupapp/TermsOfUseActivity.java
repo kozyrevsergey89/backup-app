@@ -1,7 +1,6 @@
 package com.backupapp;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -38,8 +37,9 @@ public class TermsOfUseActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		if (chkAgree.isChecked()) {
 			SharedUtils.writeToShared(this, "TermsAgreed", "true");
-			Intent intent = new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			//Intent intent = new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			//startActivity(intent);
+			finish();
 		}
 	}
 	
