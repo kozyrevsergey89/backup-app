@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,12 +54,14 @@ public class LoginActivity extends Activity {
 	// Values for email and password at the time of the login attempt.
 	private String mLogin;
 	private String mPassword;
+	private String mVerifyPassword;
 	private String mEmail;
 
 	// UI references.
 	private EditText mLoginView;
 	private EditText mPasswordView;
 	private EditText mEmailView;
+	private EditText verifyPass;
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
@@ -86,6 +87,7 @@ public class LoginActivity extends Activity {
 		mLoginView.setText(mLogin);
 		
 		mEmailView = (EditText) findViewById(R.id.email);
+		verifyPass = (EditText) findViewById(R.id.verify_pass);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
@@ -137,13 +139,19 @@ public class LoginActivity extends Activity {
 		mLoginView.setError(null);
 		mPasswordView.setError(null);
 		mEmailView.setError(null);
+		verifyPass.setError(null);
 
 		// Store values at the time of the login attempt.
 		mLogin = mLoginView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 		if(mEmailView.getVisibility() == View.VISIBLE) {
-			mEmail = mPasswordView.getText().toString();
+			mEmail = mEmailView.getText().toString();
 		}
+		
+		if (verifyPass.getVisibility() == View.VISIBLE) {
+			mVerifyPassword = verifyPass.getText().toString();
+		}
+		
 
 		boolean cancel = false;
 		View focusView = null;
@@ -162,9 +170,15 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		} 
 		
-		if(TextUtils.isEmpty(mEmail)) {
+		if(mEmailView.getVisibility() == View.VISIBLE && TextUtils.isEmpty(mEmail)) {
 			mEmailView.setError(getString(R.string.error_field_required));
 			focusView = mEmailView;
+			cancel = true;
+		}
+		
+		if (verifyPass.getVisibility() == View.VISIBLE && TextUtils.isEmpty(mVerifyPassword)) {
+			verifyPass.setError(getString(R.string.error_field_required));
+			focusView = verifyPass;
 			cancel = true;
 		}
 		
@@ -175,7 +189,9 @@ public class LoginActivity extends Activity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			if (this instanceof LoginActivity && mEmailView.getVisibility() != View.VISIBLE) { 
+			if (this instanceof LoginActivity 
+					&& mEmailView.getVisibility() != View.VISIBLE
+					&& verifyPass.getVisibility() != View.VISIBLE) {
 				mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 				callback = new LoginCallback(this);
 				requestTask = new AsyncRequestor(callback);
@@ -184,11 +200,15 @@ public class LoginActivity extends Activity {
 				showProgress(true);
 				requestTask.execute(loginRequest);
 			} else {
-				showProgress(true);
-				RegistrationCallback callback = new RegistrationCallback(this);
-				requestTask = new AsyncRequestor(callback);
-				RegRequest req = new RegRequest().setParams(mLogin, mPassword, mEmail);
-				requestTask.execute(req);
+				if (mPassword.equals(mVerifyPassword)) {
+					RegistrationCallback callback = new RegistrationCallback(this);
+					requestTask = new AsyncRequestor(callback);
+					RegRequest req = new RegRequest().setParams(mLogin, mPassword, mEmail);
+					requestTask.execute(req);
+					showProgress(true);
+				} else {
+					Toast.makeText(this, "Unable to verify password", Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 	}
@@ -265,32 +285,36 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		public void processResponse(final Response response) {
-			if(response.isSuccess() && !response.getCookies().isEmpty()) {
-				for(Parameter cookie : response.getCookies()) {
-					if ("user_id".equals(cookie.getName())) {
-						SharedUtils.writeToShared(context, "user_id", cookie.getValue());
-						GCMRegistrar.checkManifest(context);
-						final String regId = GCMRegistrar.getRegistrationId(context);
-						//if (regId.equals("")) {
+			if(response.isSuccess()) {
+				if(!response.getCookies().isEmpty()) {
+					for(Parameter cookie : response.getCookies()) {
+						if ("user_id".equals(cookie.getName())) {
+							SharedUtils.writeToShared(context, "user_id", cookie.getValue());
+							GCMRegistrar.checkManifest(context);
+							//final String regId = GCMRegistrar.getRegistrationId(context);
+							//if (regId.equals("")) {
+							GCMRegistrar.getRegistrationId(context);
 							GCMRegistrar.register(context, SENDER_ID);
-						//}
-						/*
-						else if (GCMRegistrar.isRegisteredOnServer(context)) {
-							context.startActivity(new Intent(context, MethodActivity.class));
-							((LoginActivity)context).showProgress(false);
-							((LoginActivity)context).finish();
-							context = null;
-							return; 
+							//}
+							/*
+							else if (GCMRegistrar.isRegisteredOnServer(context)) {
+								context.startActivity(new Intent(context, MethodActivity.class));
+								((LoginActivity)context).showProgress(false);
+								((LoginActivity)context).finish();
+								context = null;
+								return; 
+							}
+							*/
 						}
-						*/
 					}
 				}
 			} else {
-				((LoginActivity)context).showProgress(false);
 				Toast.makeText(context, R.string.login_error, Toast.LENGTH_SHORT).show();
 				//context.startActivity(new Intent(context, MethodActivity.class));
 				//((LoginActivity)context).finish();
 			}
+			((LoginActivity)context).showProgress(false);
+			//Toast.makeText(context, R.string.login_error, Toast.LENGTH_SHORT).show();
 			context = null;
 		}
 		
@@ -348,6 +372,16 @@ public class LoginActivity extends Activity {
 					}
 				}
 				
+				if(!response.getHeaders().isEmpty()) {
+					List<Parameter> headers = response.getHeaders();
+					for (Parameter param: headers) {
+						if("version".equals(param.getName())) {
+							String value = param.getValue();
+							SharedUtils.writeToShared(activity, "version", value);
+							Log.i("123123", "version - " + value);
+						}
+					}
+				}
 				
 				boolean collision = false;
 				boolean useflag = false;
@@ -375,6 +409,7 @@ public class LoginActivity extends Activity {
 				} else {
 					Toast.makeText(activity, response.getMessage() + "", Toast.LENGTH_SHORT).show();
 				}
+				
 			}
 			
 			activity.showProgress(false);
@@ -385,6 +420,11 @@ public class LoginActivity extends Activity {
 	protected void setEmailViewVisible() {
 		if (mEmailView == null) { return; }
 		mEmailView.setVisibility(View.VISIBLE);
+	}
+	
+	protected void setVerifyViewVisible() {
+		if (verifyPass == null) { return; }
+		verifyPass.setVisibility(View.VISIBLE);
 	}
 	
 	@Override

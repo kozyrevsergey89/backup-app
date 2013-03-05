@@ -43,7 +43,7 @@ import com.tetra.service.rest.Response;
 
 public class MethodActivity extends Activity implements OnClickListener {
 	
-	public static final int RESULT_ENABLE = 1, RESULT_SOUND=5;
+	public static final int RESULT_ENABLE = 1, RESULT_SOUND = 5;
 	private String userId;
 	private Button backup, restore, enableWipe, chooseSound, mapDevice;
 	private DevicePolicyManager mDPM;
@@ -53,6 +53,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 	private View statusView;
 	public String url, soundUriString;
 	private ContactLader contactLader;
+	private boolean isLite = false;
 	
 
 	@Override
@@ -72,6 +73,11 @@ public class MethodActivity extends Activity implements OnClickListener {
 		chooseSound = (Button) findViewById(R.id.bt_choose_sound);
 		mapDevice = (Button) findViewById(R.id.bt_map_device);
 		statusView = (View) findViewById(R.id.sstatus);
+		
+		String version = SharedUtils.getFromShared(this, "version");
+		if (null != version && !version.isEmpty() && "lite".equals(version)) { 
+			isLite = true; 
+		}
 		
 		if (!useflag) {
 			backup.setVisibility(View.GONE);
@@ -117,8 +123,8 @@ public class MethodActivity extends Activity implements OnClickListener {
 
 		if (!show) {
 			backup.setVisibility(View.VISIBLE);
-			restore.setVisibility(View.VISIBLE);
 			enableWipe.setVisibility(View.VISIBLE);
+			restore.setVisibility(View.VISIBLE);
 			chooseSound.setVisibility(View.VISIBLE);
 			//if (!useflag) { mapDevice.setVisibility(View.VISIBLE); }
 		} else {
@@ -140,6 +146,10 @@ public class MethodActivity extends Activity implements OnClickListener {
 	public void onClick(final View view) {
 		switch (view.getId()) {
 		case R.id.bt_backup_vcf:
+			if (isLite) {
+				Toast.makeText(this, R.string.only_in_full, Toast.LENGTH_SHORT).show();
+				break;
+			}
 			showProgress(true);
 			contactLader.execute();
 			//GetFileRequest fileRequest = new GetFileRequest().addCookie(userId);
@@ -147,12 +157,20 @@ public class MethodActivity extends Activity implements OnClickListener {
 			//sendRequest(callback, fileRequest);
 			break;
 		case R.id.bt_restore_vcf:
+			if (isLite) {
+				Toast.makeText(this, R.string.only_in_full, Toast.LENGTH_SHORT).show();
+				break;
+			}
 			showProgress(true);
 			GetBackFile backGet = new GetBackFile().addCookie(userId);
 			GetBackFileCallback fileCallback = new GetBackFileCallback(this);
 			sendRequest(fileCallback, backGet);
 			break;
 		case R.id.bt_enable_wipe:
+			if (isLite) { 
+				Toast.makeText(this, R.string.only_in_full, Toast.LENGTH_SHORT).show();
+				break; 
+			}
 			if (!mAdminActive) { getAdminRights(); }
 			else { Toast.makeText(this, 
 					"The app already has the admin rights",

@@ -12,6 +12,7 @@
     <string name="agree">Согласен</string>
     <string name="second_user">Данное устройство уже привязан к иному юзеру</string>
     <string name="login_error">Ошибка при аутентификации, неправильный логин или пароль</string>
+    <string name="only_in_full">Доступно только в полной версии</string>
     <string name="not_mapped">Это устройство не привязано к AVG Mobile Protection!</string>
     <string name="terms_text"><![CDATA[<span style="color:#000000; font-family:'Times New Roman', Times, serif; font-size:10px; font-style: normal;">
 <strong>УСЛОВИЯ ИСПОЛЬЗОВАНИЯ</strong>
