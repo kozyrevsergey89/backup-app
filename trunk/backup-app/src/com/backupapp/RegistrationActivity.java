@@ -1,5 +1,6 @@
 package com.backupapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 public class RegistrationActivity extends LoginActivity {
@@ -10,6 +11,13 @@ public class RegistrationActivity extends LoginActivity {
 		super.onCreate(savedInstanceState);
 		setEmailViewVisible();
 		setVerifyViewVisible();
+		setRegistrationTextGone();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		startActivity(new Intent(this, LoginActivity.class));
+		finish();
 	}
 	
 

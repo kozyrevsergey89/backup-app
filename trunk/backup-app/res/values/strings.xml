@@ -14,6 +14,7 @@
     <string name="login_error">Authentification failed, incorrect password or login</string>
     <string name="second_user">Current device already has registered user</string>
     <string name="only_in_full">Enabled only in full version</string>
+    <string name="register">Register</string>
     <string name="terms_text"><![CDATA[<span style="color:#000000; font-family:'Times New Roman', Times, serif; font-size:10px; font-style: normal;">
 <strong>УСЛОВИЯ ИСПОЛЬЗОВАНИЯ</strong>
 <p>

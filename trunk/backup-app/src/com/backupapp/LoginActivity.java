@@ -24,7 +24,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -65,6 +67,8 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	
+	private TextView register;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,11 @@ public class LoginActivity extends Activity {
 		
 		mEmailView = (EditText) findViewById(R.id.email);
 		verifyPass = (EditText) findViewById(R.id.verify_pass);
+		
+		register = (TextView) findViewById(R.id.reg_text);
+		String regText = getString(R.string.register);
+		register.setMovementMethod(LinkMovementMethod.getInstance());
+		register.setText(Html.fromHtml("<a href='app://backup'>" + regText + "</a>"));
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
@@ -425,6 +434,11 @@ public class LoginActivity extends Activity {
 	protected void setVerifyViewVisible() {
 		if (verifyPass == null) { return; }
 		verifyPass.setVisibility(View.VISIBLE);
+	}
+	
+	protected void setRegistrationTextGone() {
+		if (register == null) { return; }
+		register.setVisibility(View.GONE);
 	}
 	
 	@Override
