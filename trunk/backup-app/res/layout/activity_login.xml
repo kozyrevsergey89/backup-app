@@ -48,6 +48,21 @@
                 android:maxLines="1"
                 android:singleLine="true" />
 
+            
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textEmailSubject"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:visibility="gone"
+                />
+            
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
@@ -61,14 +76,14 @@
                 android:singleLine="true" />
             
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/verify_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
+                android:hint="@string/verify"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
-                android:inputType="textEmailSubject"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:visibility="gone"

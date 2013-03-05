@@ -2,7 +2,6 @@ package com.backupapp;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import com.backupapp.utils.*;
 
@@ -36,8 +34,8 @@ public class TermsOfUseActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		if (chkAgree.isChecked()) {
 			SharedUtils.writeToShared(this, "TermsAgreed", "true");
-			//Intent intent = new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			//startActivity(intent);
+			Intent intent = new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			finish();
 		}
 	}
