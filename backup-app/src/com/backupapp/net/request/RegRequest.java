@@ -14,7 +14,7 @@ public class RegRequest extends Request<Serializable>{
 	public RegRequest() {
 		super();
 		setHeaders("mobile_registration", "true");
-		setHeaders("content-type", "application/x-www-urlencoded");
+		setHeaders("content-type", "application/x-www-form-urlencoded");
 	}
 	
 	@Override
