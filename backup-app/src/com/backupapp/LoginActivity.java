@@ -212,7 +212,7 @@ public class LoginActivity extends Activity {
 				if (mPassword.equals(mVerifyPassword)) {
 					RegistrationCallback callback = new RegistrationCallback(this);
 					requestTask = new AsyncRequestor(callback);
-					RegRequest req = new RegRequest().setParams(mLogin, mPassword, mEmail);
+					RegRequest req = new RegRequest().setParams(mLogin, mPassword, mEmail, mVerifyPassword);
 					requestTask.execute(req);
 					showProgress(true);
 				} else {
