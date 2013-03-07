@@ -27,10 +27,11 @@ public class RegRequest extends Request<Serializable>{
 		return "https://backupbackend.appspot.com/signup";
 	}
 	
-	public RegRequest setParams(final String name, final String pass, final String email) {
+	public RegRequest setParams(final String name, final String pass, final String email, final String verify) {
 		setPostEntities("username", name);
 		setPostEntities("password", pass);
 		setPostEntities("email", email);
+		setPostEntities("verify", verify);
 		return this;
 	}
 	
