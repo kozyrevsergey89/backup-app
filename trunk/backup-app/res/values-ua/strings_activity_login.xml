@@ -1,6 +1,9 @@
 <resources>
 
     <!-- Strings related to login -->
+    <string name="login">Логін</string>
+    <string name="email">Пошта</string>
+    <string name="verify">Підтверження пароля</string>
     <string name="prompt_email">Логін</string>
     <string name="prompt_password">Пароль</string>
     <string name="action_sign_in_register"><b>Вхід</b></string>
