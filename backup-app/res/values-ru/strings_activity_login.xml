@@ -1,8 +1,11 @@
 <resources>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Логин</string>
+    <string name="login">Логин</string>
     <string name="prompt_password">Пароль</string>
+    <string name="email">Почта</string>
+    <string name="verify">Подтверждение пароля</string>
+    <string name="prompt_email">Логин</string>
     <string name="action_sign_in_register"><b>Вход</b></string>
     <string name="action_sign_in_short">Вход</string>
     <string name="menu_forgot_password">Восстановить последний пароль</string>

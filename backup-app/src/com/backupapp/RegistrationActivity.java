@@ -2,6 +2,7 @@ package com.backupapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 public class RegistrationActivity extends LoginActivity {
 	
@@ -12,6 +13,8 @@ public class RegistrationActivity extends LoginActivity {
 		setEmailViewVisible();
 		setVerifyViewVisible();
 		setRegistrationTextGone();
+		Button registerBtn = (Button) findViewById(R.id.sign_in_button);
+		registerBtn.setText(R.string.register);
 	}
 	
 	@Override
