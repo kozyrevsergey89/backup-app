@@ -13,8 +13,12 @@
     <string name="second_user">Данний пристрій вже має зареєстрованного користувача</string>
     <string name="login_error">Помилка при аутентифікаціі, неверний логін або пароль</string>
     <string name="only_in_full">Доступно тільки у повній версії</string>
-    <string name="register">Зареєструватись</string>
+    <string name="register"><b>Зареєструватись</b></string>
+    <string name="or">або</string>
+    <string name="create_user"><b>Створити обліковий запис</b></string>
+    <string name="one_device">На одному пристрої не може бути більше одного запису</string>
     <string name="not_mapped">Данний пристрій не прив\'язано до AVG Mobile Protection!</string>
+    <string name="user_terms">Якщо у вас вже є обліковий запис - увійдіть з наявними даними, якщо немає - створіть тестову обліковий запис.</string>
     <string name="terms_text"><![CDATA[<span style="color:#000000; font-family:'Times New Roman', Times, serif; font-size:10px; font-style: normal;">
 <strong>УСЛОВИЯ ИСПОЛЬЗОВАНИЯ</strong>
 <p>

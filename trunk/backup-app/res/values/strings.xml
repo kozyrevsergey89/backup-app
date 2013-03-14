@@ -14,7 +14,11 @@
     <string name="login_error">Authentification failed, incorrect password or login</string>
     <string name="second_user">Current device already has registered user</string>
     <string name="only_in_full">Enabled only in full version</string>
-    <string name="register">Register</string>
+    <string name="register"><b>Register</b></string>
+    <string name="or">or</string>
+    <string name="create_user"><b>Create an account</b></string>
+    <string name="one_device">On one device can not be more than one account</string>
+    <string name="user_terms">If you already have an account - log in with the data available, if not, - create a test account.</string>
     <string name="terms_text"><![CDATA[<span style="color:#000000; font-family:'Times New Roman', Times, serif; font-size:10px; font-style: normal;">
 <strong>УСЛОВИЯ ИСПОЛЬЗОВАНИЯ</strong>
 <p>
