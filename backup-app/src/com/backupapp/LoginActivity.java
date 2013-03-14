@@ -26,11 +26,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,6 +69,11 @@ public class LoginActivity extends Activity {
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
 	
+	private TextView userTerms, oneDevice;
+	
+	private Button registrationButton;
+	private Button startRegister;
+	private Button signIn;
 	private TextView register;
 
 	@Override
@@ -82,9 +88,13 @@ public class LoginActivity extends Activity {
 		if ( checkStr == null) {
 			Intent intent = new Intent(getApplicationContext(), TermsOfUseActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+			finish();
 		}
 			
-			
+		
+		userTerms = (TextView) findViewById(R.id.user_terms);
+		oneDevice = (TextView) findViewById(R.id.two_users);
+		
 		// Set up the login form.
 		mLogin = getIntent().getStringExtra(EXTRA_LOGIN);
 		mLoginView = (EditText) findViewById(R.id.login);
@@ -94,9 +104,32 @@ public class LoginActivity extends Activity {
 		verifyPass = (EditText) findViewById(R.id.verify_pass);
 		
 		register = (TextView) findViewById(R.id.reg_text);
-		String regText = getString(R.string.register);
-		register.setMovementMethod(LinkMovementMethod.getInstance());
+		String regText = getString(R.string.or);
 		register.setText(Html.fromHtml("<a href='app://backup'>" + regText + "</a>"));
+		
+		startRegister = (Button) findViewById(R.id.push_to_reg_button);
+		startRegister.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				attemptLogin();
+			}
+		});
+		
+		signIn = (Button) findViewById(R.id.sign_in_button);
+		signIn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				attemptLogin();
+			}
+		});
+		
+		registrationButton = (Button) findViewById(R.id.register_button);
+		registrationButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+			}
+		});
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
@@ -116,16 +149,7 @@ public class LoginActivity extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		if (this instanceof LoginActivity) {
-			findViewById(R.id.sign_in_button).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						attemptLogin();
-					}
-				});
-		
-		
+		if (this instanceof LoginActivity) {		
 			gcmCallback = new GCMCallback(this);
 			broadcastReceiver = new ServiceBroadcast(gcmCallback);
 			registerReceiver(broadcastReceiver, new IntentFilter(GCMIntentService.MESSAGE_ACTION));
@@ -194,7 +218,7 @@ public class LoginActivity extends Activity {
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
-			focusView.requestFocus();
+			//focusView.requestFocus();
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
@@ -238,6 +262,7 @@ public class LoginActivity extends Activity {
 			Log.i("123123", response.getResultCode() + "");
 			context.showProgress(false);
 			if(response.isSuccess()) {
+				context.finish();
 				context.startActivity(new Intent(context, LoginActivity.class));
 			}
 		}
@@ -439,6 +464,28 @@ public class LoginActivity extends Activity {
 	protected void setRegistrationTextGone() {
 		if (register == null) { return; }
 		register.setVisibility(View.GONE);
+	}
+	
+	protected void setRegistrationButtonGone() {
+		if (registrationButton == null) { return; }
+		registrationButton.setVisibility(View.GONE);
+	}
+	
+	protected void setRegistrationStartVisible() {
+		if (startRegister == null) { return; }
+		startRegister.setVisibility(View.VISIBLE);
+	}
+	
+	protected void setSignInGome() {
+		if (signIn == null) { return; }
+		signIn.setVisibility(View.GONE);
+	}
+	
+	protected void setTwoDeviceWarningVisible() {
+		if (userTerms != null && oneDevice != null) {
+			userTerms.setVisibility(View.GONE);
+			oneDevice.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	@Override

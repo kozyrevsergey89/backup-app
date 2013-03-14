@@ -13,8 +13,12 @@
     <string name="second_user">Данное устройство уже привязан к иному юзеру</string>
     <string name="login_error">Ошибка при аутентификации, неправильный логин или пароль</string>
     <string name="only_in_full">Доступно только в полной версии</string>
-    <string name="register">Зарегистрироваться</string>
+    <string name="register"><b>Зарегистрироваться</b></string>
     <string name="not_mapped">Это устройство не привязано к AVG Mobile Protection!</string>
+    <string name="or">или</string>
+    <string name="create_user"><b>Создать учётную запись</b></string>
+    <string name="one_device">На одном устройстве не может быть больше одной записи</string>
+    <string name="user_terms">Если у вас уже есть учётная запись - войдите с имеющимися данными, если нет - создайте тестовую учётную запись.</string>
     <string name="terms_text"><![CDATA[<span style="color:#000000; font-family:'Times New Roman', Times, serif; font-size:10px; font-style: normal;">
 <strong>УСЛОВИЯ ИСПОЛЬЗОВАНИЯ</strong>
 <p>

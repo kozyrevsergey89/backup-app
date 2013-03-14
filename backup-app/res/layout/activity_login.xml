@@ -31,83 +31,140 @@
 
     <!-- Login form -->
 
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
 
-        <LinearLayout
-            style="@style/LoginFormContainer"
-            android:orientation="vertical" >
+   <RelativeLayout
+       android:id="@+id/login_form" 
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       >
+        	<LinearLayout
+            	style="@style/LoginFormContainer"
+            	android:orientation="vertical" 
+            	>
 
-            <EditText
-                android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/login"
-                android:maxLines="1"
-                android:singleLine="true" />
+            	<EditText
+                	android:id="@+id/login"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content"
+                	android:hint="@string/login"
+                	android:maxLines="1"
+                	android:singleLine="true" />
 
             
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textEmailSubject"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:visibility="gone"
-                />
+            	<EditText
+                	android:id="@+id/email"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content"
+                	android:hint="@string/email"
+                	android:imeActionId="@+id/login"
+                	android:imeActionLabel="@string/action_sign_in_short"
+                	android:imeOptions="actionUnspecified"
+                	android:inputType="textEmailSubject"
+                	android:maxLines="1"
+                	android:singleLine="true"
+                	android:visibility="gone"
+                	/>
             
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+            	<EditText
+                	android:id="@+id/password"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content"
+                	android:hint="@string/prompt_password"
+                	android:imeActionId="@+id/login"
+                	android:imeActionLabel="@string/action_sign_in_short"
+                	android:imeOptions="actionUnspecified"
+                	android:inputType="textPassword"
+                	android:maxLines="1"
+                	android:singleLine="true" />
             
-            <EditText
-                android:id="@+id/verify_pass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/verify"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:visibility="gone"
-                />
+            	<EditText
+                	android:id="@+id/verify_pass"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content"
+                	android:hint="@string/verify"
+                	android:imeActionId="@+id/login"
+                	android:imeActionLabel="@string/action_sign_in_short"
+                	android:imeOptions="actionUnspecified"
+                	android:inputType="textPassword"
+                	android:maxLines="1"
+                	android:singleLine="true"
+                	android:visibility="gone"
+                	/>
 
-            <Button
-                android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="@string/action_sign_in_register" />
+            	<Button
+                	android:id="@+id/sign_in_button"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:layout_marginTop="16dp"
+                	android:paddingLeft="32dp"
+                	android:paddingRight="32dp"
+                	android:text="@string/action_sign_in_register"
+                	android:layout_gravity="center"
+                	/>
             
-            <TextView
-                android:id="@+id/reg_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="15sp"
-                android:textIsSelectable="true"
-                />
-        </LinearLayout>
-    </ScrollView>
+            	<TextView
+                	android:id="@+id/reg_text"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:layout_gravity="center"
+                	android:textSize="15sp"
+                	android:paddingTop="10dp"
+                	/>
+            
+            	<Button
+                	android:id="@+id/register_button"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:layout_marginTop="16dp"
+                	android:paddingLeft="32dp"
+                	android:paddingRight="32dp"
+                	android:text="@string/create_user"
+                	android:layout_gravity="center"
+                	/>
+            
+            	<Button
+                	android:id="@+id/push_to_reg_button"
+               		android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:layout_marginTop="30dp"
+                	android:paddingLeft="32dp"
+                	android:paddingRight="32dp"
+                	android:text="@string/register"
+                	android:layout_gravity="center"
+                	android:visibility="gone"
+                	/>
+       		 </LinearLayout>
+    <TextView
+        	    android:id="@+id/user_terms"
+        	    android:layout_height="wrap_content" 
+        	    android:layout_width="wrap_content"
+        	    android:paddingLeft="50dp"
+        	    android:paddingRight="50dp"
+        	    android:lines="3"
+        	    android:text="@string/user_terms"
+        	    android:layout_gravity="center_horizontal"
+        	    android:gravity="center_horizontal"
+        	    android:layout_alignParentBottom="true"
+        	    android:paddingBottom="7dp"
+        	    android:textSize="12sp"
+        	    />
+    
+    <TextView
+        	    android:id="@+id/two_users"
+        	    android:layout_height="wrap_content" 
+        	    android:layout_width="wrap_content"
+        	    android:paddingLeft="45dp"
+        	    android:paddingRight="45dp"
+        	    android:lines="3"
+        	    android:text="@string/one_device"
+        	    android:layout_gravity="center_horizontal"
+        	    android:gravity="center_horizontal"
+        	    android:layout_alignParentBottom="true"
+        	    android:visibility="gone"
+        	    android:paddingBottom="7dp"
+        	    android:textSize="12sp"
+        	    
+        	    />
+    </RelativeLayout>
 
 </merge>
