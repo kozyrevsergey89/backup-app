@@ -341,13 +341,17 @@ public class LoginActivity extends Activity {
 							*/
 						}
 					}
+				} else {
+					((LoginActivity)context).showProgress(false);
+					Toast.makeText(context, R.string.login_error, Toast.LENGTH_SHORT).show();
 				}
 			} else {
 				Toast.makeText(context, R.string.login_error, Toast.LENGTH_SHORT).show();
 				//context.startActivity(new Intent(context, MethodActivity.class));
 				//((LoginActivity)context).finish();
+				((LoginActivity)context).showProgress(false);
 			}
-			((LoginActivity)context).showProgress(false);
+			//((LoginActivity)context).showProgress(false);
 			//Toast.makeText(context, R.string.login_error, Toast.LENGTH_SHORT).show();
 			context = null;
 		}

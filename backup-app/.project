@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>backup-app</name>
+	<name>AFG Mobile Protection</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>res/values-en</name>
+			<type>2</type>
+			<location>/home/sergii/workspace/AFG Mobile Protection/res/values</location>
+		</link>
+	</linkedResources>
 </projectDescription>
