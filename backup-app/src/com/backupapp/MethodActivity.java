@@ -15,12 +15,14 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,7 +47,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 	
 	public static final int RESULT_ENABLE = 1, RESULT_SOUND = 5;
 	private String userId;
-	private Button backup, restore, enableWipe, chooseSound, mapDevice;
+	private Button backup, restore, enableWipe, chooseSound, mapDevice, pictures;
 	private DevicePolicyManager mDPM;
 	private ComponentName mDeviceAdminSample;
     private boolean mAdminActive;
@@ -54,7 +56,8 @@ public class MethodActivity extends Activity implements OnClickListener {
 	public String url, soundUriString;
 	private ContactLader contactLader;
 	private boolean isLite = false;
-	
+    private static final int SELECT_PICTURE = 8;
+    private String selectedImagePath;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -73,7 +76,17 @@ public class MethodActivity extends Activity implements OnClickListener {
 		chooseSound = (Button) findViewById(R.id.bt_choose_sound);
 		mapDevice = (Button) findViewById(R.id.bt_map_device);
 		statusView = (View) findViewById(R.id.sstatus);
-		
+		pictures = (Button) findViewById(R.id.bt_pictures_backup_button);
+        pictures.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+            }
+        });
 		String version = SharedUtils.getFromShared(this, "version");
 		if (null != version && !version.isEmpty() && "lite".equals(version)) { 
 			isLite = true; 
@@ -142,6 +155,15 @@ public class MethodActivity extends Activity implements OnClickListener {
 		sendRequest(callback, fileRequest);
 	}
 
+
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 	@Override
 	public void onClick(final View view) {
 		switch (view.getId()) {
@@ -252,6 +274,10 @@ public class MethodActivity extends Activity implements OnClickListener {
              				.addCookie(cookie).setAdminFlag(isActiveAdmin());
              sendRequest(new AdminFlagCallback(), request);
              return;
+            case SELECT_PICTURE:
+                Uri selectedImageUri = data.getData();
+                selectedImagePath = getPath(selectedImageUri);
+                return;
 		case RESULT_SOUND:
 			if (resultCode == Activity.RESULT_OK) {
 				Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
@@ -454,7 +480,8 @@ public class MethodActivity extends Activity implements OnClickListener {
 				Log.e("123123", e.getMessage() + "");
 			}
 		}
-		
+
+
 	}
 
 }
