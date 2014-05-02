@@ -1,10 +1,9 @@
 	package com.backupapp;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import android.animation.Animator;
@@ -16,6 +15,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ import com.backupapp.net.request.GCMRequest;
 import com.backupapp.net.request.GetBackFile;
 import com.backupapp.net.request.GetFileRequest;
 import com.backupapp.utils.SharedUtils;
+import com.luminous.pick.Action;
 import com.tetra.service.rest.Parameter;
 import com.tetra.service.rest.Request;
 import com.tetra.service.rest.Response;
@@ -46,8 +48,9 @@ import com.tetra.service.rest.Response;
 public class MethodActivity extends Activity implements OnClickListener {
 	
 	public static final int RESULT_ENABLE = 1, RESULT_SOUND = 5;
-	private String userId;
-	private Button backup, restore, enableWipe, chooseSound, mapDevice, pictures;
+    private static final String TAG = "123";
+    private String userId;
+	private Button backup, restore, enableWipe, chooseSound, mapDevice, pictures, restorePictures;
 	private DevicePolicyManager mDPM;
 	private ComponentName mDeviceAdminSample;
     private boolean mAdminActive;
@@ -59,7 +62,10 @@ public class MethodActivity extends Activity implements OnClickListener {
     private static final int SELECT_PICTURE = 8;
     private String selectedImagePath;
 
-	@Override
+    public MethodActivity() {
+    }
+
+    @Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.method_activity);
@@ -77,15 +83,29 @@ public class MethodActivity extends Activity implements OnClickListener {
 		mapDevice = (Button) findViewById(R.id.bt_map_device);
 		statusView = (View) findViewById(R.id.sstatus);
 		pictures = (Button) findViewById(R.id.bt_pictures_backup_button);
+        restorePictures = (Button) findViewById(R.id.restore_pictures);
+        restorePictures.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        downloadFile("http://images.cosmo.ru/upload/cosmo_cache_img/607/6075cd7775546c3ef7cc4b2ff5bc9950_cropped_308x411.jpg");
+                        return null;
+                    }
+                }.execute();
+
+
+            }
+        });
         pictures.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
+//                intent.setType("image/*");
+                intent.setAction(Action.ACTION_MULTIPLE_PICK);
+                startActivityForResult(/*Intent.createChooser(intent,
+                        "Select Picture")*/intent, SELECT_PICTURE);
             }
         });
 		String version = SharedUtils.getFromShared(this, "version");
@@ -111,6 +131,38 @@ public class MethodActivity extends Activity implements OnClickListener {
         mDeviceAdminSample = new ComponentName(this, BackupAdminReceiver.class);
         mAdminActive = isActiveAdmin();
 	}
+
+    void downloadFile(String fileUrl){
+        Log.d(TAG,"downloadFile");
+        Log.d(TAG,"fileUrl="+fileUrl);
+        URL myFileUrl =null;
+        try {
+            myFileUrl= new URL(fileUrl);
+            Log.d(TAG,"fileUrl is OK URL");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            Log.d(TAG,"fileUrl is FUCKEN SHIT URL");
+        }
+        try {
+            HttpURLConnection conn= (HttpURLConnection)myFileUrl.openConnection();
+            conn.setDoInput(true);
+            Log.d(TAG,"going to connect.....");
+            conn.connect();
+            Log.d(TAG,"connected OK");
+            InputStream is = conn.getInputStream();
+            Log.d(TAG,"got InputStream");
+            Bitmap bmImg = BitmapFactory.decodeStream(is);
+            File file = new File("/sdcard/test.jpg");
+            OutputStream stream = new FileOutputStream(file);
+            bmImg.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            MediaStore.Images.Media.insertImage(getContentResolver(), bmImg, file.getName(), file.getName());
+            Log.d(TAG, "decoded InputStream");
+            Log.d(TAG,"just show image");
+        } catch (IOException e) {
+            Log.d(TAG,"oops, ERROR");
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Shows the progress UI and hides the login form.
