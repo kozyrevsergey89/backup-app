@@ -83,6 +83,7 @@ public class MethodActivity extends Activity implements OnClickListener {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
             }
@@ -274,10 +275,14 @@ public class MethodActivity extends Activity implements OnClickListener {
              				.addCookie(cookie).setAdminFlag(isActiveAdmin());
              sendRequest(new AdminFlagCallback(), request);
              return;
-            case SELECT_PICTURE:
-                Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
-                return;
+        case SELECT_PICTURE:
+//            Uri selectedImageUri = data.getData();
+//            selectedImagePath = getPath(selectedImageUri);
+            String[] all_path = data.getStringArrayExtra("all_path");
+            for (String path : all_path) {
+                Log.i("123", path);
+            }
+            return;
 		case RESULT_SOUND:
 			if (resultCode == Activity.RESULT_OK) {
 				Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
@@ -401,6 +406,32 @@ public class MethodActivity extends Activity implements OnClickListener {
 			return this;
 		}
 	}
+
+//    public class PostImageFile extends Request<Serializable>{
+//
+//        private static final long serialVersionUID = 6468307116960005184L;
+//
+//        @Override
+//        public com.tetra.service.rest.Request.RequestType getRequestType() {
+//            return RequestType.MULTIPART;
+//        }
+//
+//        @Override
+//        public String getUrl() {
+//            return "https://backupbackend.appspot.com/imagetest";
+//        }
+//
+//        public PostFile addFile(final File file) {
+//            setFile(file);
+//            return this;
+//        }
+//
+//        public PostFile addCookie(final String cookie) {
+//            //setHeaders("content-type", "application/xml");
+//            setHeaders("Cookie", "user_id=" + cookie);
+//            return this;
+//        }
+//    }
 	
 	private static class ContactLader extends AsyncTask<Void, Void, File> {
 
