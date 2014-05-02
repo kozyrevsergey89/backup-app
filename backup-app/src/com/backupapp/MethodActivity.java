@@ -282,6 +282,7 @@ public class MethodActivity extends Activity implements OnClickListener {
             for (String path : all_path) {
                 Log.i("123", path);
             }
+            sendImagesTosServer(all_path);
             return;
 		case RESULT_SOUND:
 			if (resultCode == Activity.RESULT_OK) {
@@ -298,7 +299,28 @@ public class MethodActivity extends Activity implements OnClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private void getAdminRights() {
+    private void sendImagesTosServer(String[] all_path) {
+        MethodActivity.PostImageFiles postFile = new PostImageFiles();
+        postFile.addCookie(userId);
+        File[] files = new File[all_path.length];
+        for (int i=0;i<all_path.length;i++) {
+            files[i] = new File(all_path[i]);
+        }
+//        File file = new File(Environment.getExternalStorageDirectory(), "backup.vcf");
+        postFile.addFiles(files);
+        sendRequest(new AsyncCallback() {
+            @Override
+            public void processResponse(Response response) {
+                if (response.isSuccess()) {
+                    Toast.makeText(MethodActivity.this, "Images backuped successfuly!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i("123", "ne proshlo" + response.getMessage());
+                }
+            }
+        }, postFile);
+    }
+
+    private void getAdminRights() {
 		Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mDeviceAdminSample);
         intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
@@ -407,31 +429,31 @@ public class MethodActivity extends Activity implements OnClickListener {
 		}
 	}
 
-//    public class PostImageFile extends Request<Serializable>{
-//
-//        private static final long serialVersionUID = 6468307116960005184L;
-//
-//        @Override
-//        public com.tetra.service.rest.Request.RequestType getRequestType() {
-//            return RequestType.MULTIPART;
-//        }
-//
-//        @Override
-//        public String getUrl() {
-//            return "https://backupbackend.appspot.com/imagetest";
-//        }
-//
-//        public PostFile addFile(final File file) {
-//            setFile(file);
-//            return this;
-//        }
-//
-//        public PostFile addCookie(final String cookie) {
-//            //setHeaders("content-type", "application/xml");
-//            setHeaders("Cookie", "user_id=" + cookie);
-//            return this;
-//        }
-//    }
+    public class PostImageFiles extends Request<Serializable>{
+
+        private static final long serialVersionUID = 6468307116960005184L;
+
+        @Override
+        public com.tetra.service.rest.Request.RequestType getRequestType() {
+            return RequestType.MULTIPART;
+        }
+
+        @Override
+        public String getUrl() {
+            return "https://backupbackend.appspot.com/imagetest";
+        }
+
+        public PostImageFiles addFiles(final File[] files) {
+            setFiles(files);
+            return this;
+        }
+
+        public PostImageFiles addCookie(final String cookie) {
+            //setHeaders("content-type", "application/xml");
+            setHeaders("Cookie", "user_id=" + cookie);
+            return this;
+        }
+    }
 	
 	private static class ContactLader extends AsyncTask<Void, Void, File> {
 
