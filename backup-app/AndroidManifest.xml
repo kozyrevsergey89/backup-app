@@ -65,7 +65,15 @@
             android:name="com.backupapp.RingingActivity"
             android:screenOrientation="portrait"
             />
-        
+        <activity android:name="com.luminous.pick.CustomGalleryActivity" >
+            <intent-filter>
+                <action android:name="luminous.ACTION_PICK" />
+                <action android:name="luminous.ACTION_MULTIPLE_PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".method.BackupAdminReceiver"
                 android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data android:name="android.app.device_admin"
