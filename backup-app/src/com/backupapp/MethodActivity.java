@@ -84,6 +84,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 		statusView = (View) findViewById(R.id.sstatus);
 		pictures = (Button) findViewById(R.id.bt_pictures_backup_button);
         restorePictures = (Button) findViewById(R.id.restore_pictures);
+        restorePictures.setVisibility(View.INVISIBLE);
         restorePictures.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,7 +227,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 				break;
 			}
 			showProgress(true);
-			contactLader.execute();
+			new ContactLader(MethodActivity.this).execute();
 			//GetFileRequest fileRequest = new GetFileRequest().addCookie(userId);
 			//UrlRequestCallback callback = new UrlRequestCallback(this);
 			//sendRequest(callback, fileRequest);

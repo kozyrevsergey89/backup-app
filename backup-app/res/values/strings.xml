@@ -101,5 +101,6 @@ AFG Mobile Protection использует коммерчески разумны
 </span>]]></string>
     
 <string name="registration_form">Registration</string>
-    <string name="pictures_btn">pictures</string>
+    <string name="pictures_btn">backup pictures</string>
+    <string name="restore_pictures">restore pictures</string>
 </resources>
