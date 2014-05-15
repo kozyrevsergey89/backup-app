@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
@@ -40,7 +41,6 @@ import com.backupapp.net.request.GCMRequest;
 import com.backupapp.net.request.GetBackFile;
 import com.backupapp.net.request.GetFileRequest;
 import com.backupapp.utils.SharedUtils;
-import com.luminous.pick.Action;
 import com.tetra.service.rest.Parameter;
 import com.tetra.service.rest.Request;
 import com.tetra.service.rest.Response;
@@ -104,7 +104,7 @@ public class MethodActivity extends Activity implements OnClickListener {
             public void onClick(View v) {
                 Intent intent = new Intent();
 //                intent.setType("image/*");
-                intent.setAction(Action.ACTION_MULTIPLE_PICK);
+                intent.setAction(DrmStore.Action.ACTION_MULTIPLE_PICK);
                 startActivityForResult(/*Intent.createChooser(intent,
                         "Select Picture")*/intent, SELECT_PICTURE);
             }
@@ -193,6 +193,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 			enableWipe.setVisibility(View.VISIBLE);
 			restore.setVisibility(View.VISIBLE);
 			chooseSound.setVisibility(View.VISIBLE);
+            pictures.setVisibility(View.VISIBLE);
 			//if (!useflag) { mapDevice.setVisibility(View.VISIBLE); }
 		} else {
 			backup.setVisibility(View.GONE);
@@ -200,6 +201,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 			enableWipe.setVisibility(View.GONE);
 			mapDevice.setVisibility(View.GONE);
 			chooseSound.setVisibility(View.GONE);
+            pictures.setVisibility(View.GONE);
 		}
 	}
 	
@@ -353,6 +355,7 @@ public class MethodActivity extends Activity implements OnClickListener {
 	}
 
     private void sendImagesTosServer(String[] all_path) {
+        showProgress(true);
         MethodActivity.PostImageFiles postFile = new PostImageFiles();
         postFile.addCookie(userId);
         File[] files = new File[all_path.length];
@@ -364,6 +367,7 @@ public class MethodActivity extends Activity implements OnClickListener {
         sendRequest(new AsyncCallback() {
             @Override
             public void processResponse(Response response) {
+                showProgress(false);
                 if (response.isSuccess()) {
                     Toast.makeText(MethodActivity.this, "Images backuped successfuly!", Toast.LENGTH_SHORT).show();
                 } else {
