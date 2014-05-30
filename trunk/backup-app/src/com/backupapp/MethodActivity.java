@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -332,14 +333,22 @@ public class MethodActivity extends Activity implements OnClickListener {
              sendRequest(new AdminFlagCallback(), request);
              return;
         case SELECT_PICTURE:
-//            Uri selectedImageUri = data.getData();
-//            selectedImagePath = getPath(selectedImageUri);
-            String[] all_path = data.getStringArrayExtra("all_path");
-            for (String path : all_path) {
-                Log.i("123", path);
+            if (resultCode == Activity.RESULT_OK) {
+                String[] all_path = data.getStringArrayExtra("all_path");
+                for (String path : all_path) {
+                    Log.i("123", path);
+                }
+                sendImagesTosServer(all_path);
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        getString(R.string.picture_not_choosen_toast), Toast.LENGTH_SHORT);
+                toast.show();
             }
-            sendImagesTosServer(all_path);
+//            Uri selectedImageUri = data.getData();
+//            selectedImagePath = getPath(selectedImageUri)
+
             return;
+
 		case RESULT_SOUND:
 			if (resultCode == Activity.RESULT_OK) {
 				Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
