@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.backupapp"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.backupappmp"
+    android:versionCode="2"
+    android:versionName="1.0.2" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	
      <permission
-        android:name="com.backupapp.permission.C2D_MESSAGE"
+        android:name="com.backupappmp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission
         android:name="com.backupapp.permission.C2D_MESSAGE" />
@@ -32,11 +32,11 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_afg_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.backupapp.LoginActivity"
-            android:label="@string/app_name"
+            android:name="com.backupappmp.LoginActivity"
+            android:label="@string/app_afg_name"
             android:noHistory="true"
             android:screenOrientation="portrait" >
        	 	 <intent-filter>
@@ -46,23 +46,23 @@
         </activity>
         
         <activity 
-            android:name="com.backupapp.RegistrationActivity"
+            android:name="com.backupappmp.RegistrationActivity"
             android:screenOrientation="portrait"
             >
        	</activity> 	 
         
         <activity 
-            android:name="com.backupapp.MethodActivity"
+            android:name="com.backupappmp.MethodActivity"
             android:screenOrientation="portrait"
             />
         <activity 
-            android:name="com.backupapp.TermsOfUseActivity"
+            android:name="com.backupappmp.TermsOfUseActivity"
             android:screenOrientation="portrait"
             android:noHistory="true"
             />
         
         <activity 
-            android:name="com.backupapp.RingingActivity"
+            android:name="com.backupappmp.RingingActivity"
             android:screenOrientation="portrait"
             />
         <activity android:name="com.luminous.pick.CustomGalleryActivity" >
@@ -74,7 +74,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".method.BackupAdminReceiver"
+        <receiver android:name="com.backupappmp.method.BackupAdminReceiver"
                 android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data android:name="android.app.device_admin"
                        android:resource="@xml/device_admin_sample" />
@@ -93,7 +93,7 @@
             </intent-filter>
         </receiver>
         
-        <service android:name=".GCMIntentService"/>
+        <service android:name="com.backupappmp.GCMIntentService"/>
         
     </application>
     

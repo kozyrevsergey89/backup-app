@@ -3,10 +3,10 @@
     <string name="app_name">AFG Mobile Protection</string>
     <string name="backup_vcard">створити резервну копію контактів</string>
     <string name="restore_vcard">відновити контакти з резервної копії</string>
-    <string name="enable_wipe">дозволити віддалену очистку</string>
-    <string name="choose_sound">обрати мелодію</string>
+    <string name="enable_wipe">дозволити дистанційне видалення інформації з телефону та SD карти</string>
+    <string name="choose_sound">обрати мелодію для пошуку телефону</string>
     <string name="map_new_device">прив\'язати новий пристрій</string>
-    <string name="default_sound">використовується меллодія за замовчуванням</string>
+    <string name="default_sound">використовується мелодія за замовчуванням</string>
     <string name="founded">Знайшовся!</string>
     <string name="no_connection">Відсутнє мережеве з\'єднання</string>
     <string name="agree">Згоден</string>

@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">AFG Mobile Protection</string>
+    <string name="app_afg_name">AFG Mobile Protection</string>
     <string name="backup_vcard">backup contacts</string>
     <string name="restore_vcard">restore contacts</string>
     <string name="enable_wipe">enable wipe</string>
